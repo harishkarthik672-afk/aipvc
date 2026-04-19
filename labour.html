@@ -9,56 +9,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; padding-bottom: 100px; }
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .job-card { background: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; border-left: 6px solid var(--primary); box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
-        .btn-apply { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; margin-top: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(234, 67, 53, 0.2); }
-        .finish-preview-box { width: 100%; height: 180px; border: 2px dashed #ddd; border-radius: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 15px 0; background: #fafafa; }
-        .finish-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-        .finish-btn { background: #27ae60; color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; display: none; margin-top: 10px; }
-        .contact-badge { display: inline-flex; align-items: center; gap: 8px; background: #eef2f7; padding: 8px 15px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; color: #333; margin-top: 10px; }
+        .job-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .btn-apply { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; margin-top: 15px; font-weight: 700; cursor: pointer; }
+        .booked-item { background: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #eee; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; float: right; }
+        
+        /* Finish UI */
+        .finish-upload-area { margin-top: 15px; background: #f0f7ff; padding: 15px; border-radius: 15px; border: 1px dashed #007aff; text-align: center; cursor: pointer; position: relative; }
+        .finish-upload-area i { font-size: 1.5rem; color: #007aff; margin-bottom: 8px; }
+        .finish-upload-area img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; display: none; margin-bottom: 10px; }
     </style>
 </head>
-<body style="background-color: #f7f9fc;">
-    <div class="app-container" style="padding-bottom: 100px;">
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
         <header class="top-header">
-            <div class="brand-text">AI <span>LABOUR</span></div>
+            <div class="brand-text">AI <span>PVC</span></div>
             <div class="header-icons">
-                <div class="bell-icon-wrapper" onclick="switchSection('news')">
-                    <i class="fa-solid fa-bell"></i>
-                </div>
+                <div class="bell-icon-wrapper" onclick="switchSection('news')"><i class="fa-solid fa-bell"></i></div>
                 <img src="https://ui-avatars.com/api/?name=Labour" class="profile-avatar" id="globalAvatar" onclick="switchSection('more')">
             </div>
         </header>
 
-        <div id="section-home" class="content-section active">
-            <div style="margin: 20px 15px;"><img src="card1.jpeg" style="width: 100%; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);"></div>
-            <div style="padding: 20px;">
-                <h3 style="margin-bottom: 15px;">Available Opportunities</h3>
-                <div id="homeJobFeed"></div>
+        <div class="search-container" id="globalSearch">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search and reach your work...">
             </div>
         </div>
 
+        <!-- SECTION: HOME -->
+        <div id="section-home" class="content-section active">
+            <div class="services-grid">
+                <a href="estimator.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-calculator"></i></div><div class="service-name">Estimator</div></a>
+                <a href="payments.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-wallet"></i></div><div class="service-name">Payments</div></a>
+                <a href="materials.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-boxes-stacked"></i></div><div class="service-name">Materials</div></a>
+                <a href="finished_works.html" class="service-item"><div class="icon-wrapper" style="background:#e8f5e9; color:#2e7d32;"><i class="fa-solid fa-circle-check"></i></div><div class="service-name">Finished Works</div></a>
+                <a href="machinery.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-gears"></i></div><div class="service-name">Machinery</div></a>
+                <a href="pvc_id.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-id-card"></i></div><div class="service-name">AI PVC ID</div></a>
+                <a href="support.html" class="service-item"><div class="icon-wrapper"><i class="fa-solid fa-headset"></i></div><div class="service-name">Support</div></a>
+            </div>
+            <div style="margin: 20px 15px;"><img src="card1.jpeg" style="width: 100%; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: block;"></div>
+        </div>
+
+        <!-- SECTION: JOB -->
         <div id="section-job" class="content-section">
             <div style="padding: 20px;">
-                <h2 style="margin-bottom:20px;">Work Explorer</h2>
-                <div id="explorerFeed"></div>
+                <h3 style="margin-bottom: 15px; color: var(--text-dark);">Available Works In Your District</h3>
+                <div id="districtJobsFeed"></div>
             </div>
         </div>
 
+        <!-- SECTION: BOOKED -->
         <div id="section-booked" class="content-section">
             <div style="padding: 20px;">
-                <h2 style="margin-bottom:20px;">My Active Work</h2>
-                <div id="activeWorkFeed"></div>
+                <h2 style="margin-bottom: 20px; color: var(--primary);">My Work Status</h2>
+                <div id="myWorkStatusFeed"></div>
             </div>
         </div>
 
+        <!-- Navigation -->
         <nav class="bottom-nav">
             <a href="javascript:void(0)" class="nav-item active" onclick="switchSection('home', this)"><i class="fa-solid fa-house"></i><span>Home</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('job', this)"><i class="fa-solid fa-magnifying-glass"></i><span>Find</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('booked', this)"><i class="fa-solid fa-calendar-check"></i><span>Active</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('more', this)"><i class="fa-solid fa-bars"></i><span>Menu</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('job', this)"><i class="fa-solid fa-briefcase"></i><span>Find Jobs</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('booked', this)"><i class="fa-solid fa-calendar-check"></i><span>My Work</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('more', this)"><i class="fa-solid fa-bars"></i><span>More</span></a>
         </nav>
     </div>
 
@@ -73,109 +90,119 @@
         const uid = localStorage.getItem('userUid');
         const userDistrict = (localStorage.getItem('userDistrict') || 'Chennai').toLowerCase();
         const userName = localStorage.getItem('userName') || 'Labour';
-        const userMobile = localStorage.getItem('userMobile') || '9999999999';
 
         window.switchSection = (id, el) => {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(`section-${id}`).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
-            if(id==='home' || id==='job') loadJobFeed();
-            if(id==='booked') loadActiveWork();
+            if(id === 'job') fetchDistrictJobs();
+            if(id === 'booked') fetchMyWorkStatus();
             window.scrollTo(0,0);
         };
 
-        function loadJobFeed() {
+        function fetchDistrictJobs() {
+            const feed = document.getElementById('districtJobsFeed');
             onValue(ref(db, 'posts'), (snap) => {
-                document.getElementById('homeJobFeed').innerHTML = '';
-                document.getElementById('explorerFeed').innerHTML = '';
+                feed.innerHTML = '';
+                let hasJobs = false;
                 snap.forEach(child => {
                     const p = child.val();
                     if(p.district.toLowerCase() === userDistrict && p.status === 'available') {
-                        const card = `<div class="job-card">
-                            <h4 style="margin:0 0 10px;">${p.workName}</h4>
-                            <img src="${p.workImage}" style="width:100%; border-radius:10px;">
-                            <button class="btn-apply" onclick="bookJob('${p.postId}')">Quick Book</button>
-                        </div>`;
-                        document.getElementById('homeJobFeed').innerHTML += card;
-                        document.getElementById('explorerFeed').innerHTML += card;
-                    }
-                });
-            });
-        }
-
-        window.bookJob = async (id) => {
-            const pRef = ref(db, `posts/${id}`);
-            onValue(pRef, async (snap) => {
-                const p = snap.val();
-                if(p && p.status === 'available') {
-                    const bRef = push(ref(db, 'bookings'));
-                    await set(bRef, {
-                        bookingId: bRef.key, postId: id, contractorUid: p.contractorUid,
-                        contractorMobile: p.contractorMobile || 'Check Profile',
-                        labourUid: uid, labourName: userName, labourMobile: userMobile,
-                        workName: p.workName, status: 'pending', createdAt: Date.now()
-                    });
-                    await update(ref(db, `posts/${id}`), { status: 'booked' });
-                    alert("Booked Successfully! Contractor detail now in Active tab.");
-                    switchSection('booked');
-                }
-            }, {onlyOnce: true});
-        };
-
-        function loadActiveWork() {
-            onValue(ref(db, 'bookings'), (snap) => {
-                const feed = document.getElementById('activeWorkFeed');
-                feed.innerHTML = '';
-                snap.forEach(child => {
-                    const b = child.val();
-                    if(b.labourUid === uid) {
+                        hasJobs = true;
                         const card = document.createElement('div');
                         card.className = 'job-card';
                         card.innerHTML = `
-                            <div style="display:flex; justify-content:space-between;">
-                                <h4 style="margin:0;">${b.workName}</h4>
-                                <span style="font-size:0.7rem; font-weight:800; color:var(--primary);">${b.status.toUpperCase()}</span>
-                            </div>
-                            <div class="contact-badge"><i class="fa-solid fa-phone"></i> CALL: ${b.contractorMobile}</div>
-                            ${b.status==='confirmed' ? `
-                                <div class="finish-preview-box" onclick="document.getElementById('finInp_${child.key}').click()">
-                                    <div id="ph_${child.key}"><i class="fa-solid fa-camera" style="font-size:2rem; color:#ccc;"></i><br><small>TAP TO ADD FINISH PHOTO</small></div>
-                                    <img id="prev_${child.key}" style="display:none">
-                                </div>
-                                <input type="file" id="finInp_${child.key}" style="display:none" onchange="handleFinishPrep('${child.key}', this)">
-                                <button id="fBtn_${child.key}" class="finish-btn" onclick="submitFinish('${child.key}')">COMPLETE WORK</button>
-                            ` : ''}
+                            <div style="font-weight:800; font-size:1.1rem; color:#333;">${p.workName}</div>
+                            <div style="font-size:0.85rem; color:#666; margin:5px 0;"><i class="fa-solid fa-location-dot"></i> ${p.address}</div>
+                            <img src="${p.workImage}" style="width:100%; height:130px; border-radius:10px; margin:10px 0; object-fit:cover;">
+                            <button class="btn-apply" onclick="bookJob('${p.postId}', '${p.contractorUid}', '${p.workName}', '${p.contractorMobile || ''}')">Apply For Work</button>
                         `;
                         feed.appendChild(card);
                     }
                 });
+                if(!hasJobs) feed.innerHTML = '<p style="text-align:center; padding:50px; color:#aaa;">No available works in your district right now.</p>';
             });
         }
 
-        window.handleFinishPrep = (bid, inp) => {
-            const f = inp.files[0];
-            if(f) {
-                const r = new FileReader();
-                r.onload = e => {
-                    document.getElementById('prev_'+bid).src = e.target.result;
-                    document.getElementById('prev_'+bid).style.display = 'block';
-                    document.getElementById('ph_'+bid).style.display = 'none';
-                    document.getElementById('fBtn_'+bid).style.display = 'block';
+        window.bookJob = async (pid, cuid, wname, cmobile) => {
+            if(!confirm("Send booking request to Contractor?")) return;
+            const bRef = push(ref(db, 'bookings'));
+            try {
+                await update(ref(db, `posts/${pid}`), { status: 'booked' });
+                await set(bRef, {
+                    bookingId: bRef.key, postId: pid, contractorUid: cuid, contractorMobile: cmobile,
+                    labourUid: uid, labourName: userName, labourMobile: localStorage.getItem('userMobile') || '',
+                    workName: wname, status: 'pending', createdAt: Date.now()
+                });
+                alert("Request Sent! Job hidden from others.");
+                switchSection('booked');
+            } catch(e) { alert(e.message); }
+        };
+
+        function fetchMyWorkStatus() {
+            const feed = document.getElementById('myWorkStatusFeed');
+            onValue(ref(db, 'bookings'), (snap) => {
+                feed.innerHTML = '';
+                let hasWork = false;
+                snap.forEach(child => {
+                    const b = child.val();
+                    if(b.labourUid === uid) {
+                        hasWork = true;
+                        let statusColor = b.status === 'confirmed' ? '#2e7d32' : (b.status==='finished' ? '#1565c0' : '#f39c12');
+                        const card = document.createElement('div');
+                        card.className = 'booked-item';
+                        card.innerHTML = `
+                            <span class="status-badge" style="background:${statusColor}; color:white;">${b.status.replace('_',' ')}</span>
+                            <div style="font-weight:800; font-size:1.1rem; color:#333;">${b.workName}</div>
+                            ${b.status === 'confirmed' ? `
+                                <div style="margin-top:10px; display:flex; gap:10px;">
+                                    <a href="tel:${b.contractorMobile}" style="flex:1; text-align:center; background:#f0f7ff; color:#007aff; padding:10px; border-radius:10px; text-decoration:none; font-weight:800; font-size:0.8rem;"><i class="fa-solid fa-phone"></i> CALL CONTRACTOR</a>
+                                </div>
+                                <div class="finish-upload-area" onclick="document.getElementById('input_${child.key}').click()">
+                                    <input type="file" id="input_${child.key}" style="display:none;" onchange="previewFinishImage(this, '${child.key}')">
+                                    <img id="img_${child.key}">
+                                    <div id="text_${child.key}"><i class="fa-solid fa-cloud-arrow-up"></i><br><b style="font-size:0.8rem;">FINISH WORK? TAP TO UPLOAD IMAGE</b></div>
+                                </div>
+                                <button id="btn_${child.key}" class="btn-apply" onclick="submitFinishRequest('${child.key}')" style="display:none; background:#2e7d32;">SEND FINISH REQUEST</button>
+                            ` : ''}
+                            ${b.status === 'awaiting_approval' ? `<div style="margin-top:10px; color:#f39c12; font-weight:800; text-align:center;"><i class="fa-solid fa-clock"></i> Pending Approval from Contractor...</div>` : ''}
+                        `;
+                        feed.appendChild(card);
+                    }
+                });
+                if(!hasWork) feed.innerHTML = '<p style="text-align:center; padding:50px; color:#aaa;">No work bookings found.</p>';
+            });
+        }
+
+        window.previewFinishImage = (input, bid) => {
+            const file = input.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.getElementById('img_' + bid);
+                    const txt = document.getElementById('text_' + bid);
+                    const btn = document.getElementById('btn_' + bid);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    txt.style.display = 'none';
+                    btn.style.display = 'block';
                 };
-                r.readAsDataURL(f);
+                reader.readAsDataURL(file);
             }
         };
 
-        window.submitFinish = (bid) => {
-            const img = document.getElementById('prev_'+bid).src;
-            update(ref(db, `bookings/${bid}`), { status: 'finished', finishImage: img })
-                .then(() => alert("Work Marked as Finished! Contractor notified."));
+        window.submitFinishRequest = async (bid) => {
+            const img = document.getElementById('img_' + bid).src;
+            if(!img) return alert("Select a photo first!");
+            try {
+                await update(ref(db, `bookings/${bid}`), { status: 'awaiting_approval', finishImage: img });
+                alert("Finish Request Sent! Waiting for Contractor to approve.");
+            } catch(e) { alert(e.message); }
         };
 
-        const av = localStorage.getItem('userAvatarUrl');
-        if(av) document.getElementById('globalAvatar').src = av;
-        loadJobFeed();
+        window.switchSection('home');
+        if(localStorage.getItem('userAvatarUrl')) document.getElementById('globalAvatar').src = localStorage.getItem('userAvatarUrl');
     </script>
 </body>
 </html>

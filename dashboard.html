@@ -79,6 +79,7 @@
                 <a href="labours.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-users-gear color-blue"></i></div><div class="item-label">Labours</div></a>
                 <a href="materials.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-box-open color-red"></i></div><div class="item-label">Materials</div></a>
                 <a href="machinery.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-gears color-purple"></i></div><div class="item-label">Machinery</div></a>
+                <a href="finished_works.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-circle-check color-green"></i></div><div class="item-label">Finished Works</div></a>
                 <a href="hardware.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-hammer color-red"></i></div><div class="item-label">Hardware</div></a>
                 <a href="plumbing.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-faucet-drip color-red"></i></div><div class="item-label">Plumbing</div></a>
                 <a href="electricals.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-plug color-green"></i></div><div class="item-label">Electricals</div></a>
@@ -276,7 +277,7 @@
             window.scrollTo(0,0);
         };
 
-        // Submit Post (FIXED WITH MOBILE)
+        // Submit Post
         window.submitPost = async () => {
             const name = document.getElementById('postWorkName').value;
             const addr = document.getElementById('postAddress').value;
@@ -293,18 +294,17 @@
                 await set(newPostRef, {
                     postId: newPostRef.key,
                     contractorUid: uid,
-                    contractorMobile: localStorage.getItem('userMobile') || '9999999999',
                     workName: name,
                     address: addr,
                     district: dist,
                     workImage: img,
                     contractorName: localStorage.getItem('userName') || 'Contractor',
+                    contractorMobile: localStorage.getItem('userMobile') || '',
                     status: 'available',
                     createdAt: Date.now()
                 });
                 alert("Published Successfully!");
                 switchSection('mypost', document.querySelectorAll('.nav-item')[2]);
-                // Clear
                 document.getElementById('postWorkName').value = '';
                 document.getElementById('postAddress').value = '';
                 document.getElementById('sitePreview').style.display = 'none';
@@ -314,64 +314,70 @@
             document.getElementById('publishLoader').style.display = 'none';
         };
 
-        // Load Booking & Finished Feed (MODERN)
+        // Load Booking Requests (Contractor View)
         function loadBookingRequests() {
             const feed = document.getElementById('bookingRequestsFeed');
             onValue(ref(db, 'bookings'), (snap) => {
                 feed.innerHTML = '';
-                let hasNotif = false;
+                let hasReq = false;
                 snap.forEach(child => {
                     const b = child.val();
                     if(b.contractorUid === uid) {
-                        const card = document.createElement('div');
-                        card.style = "background:white; margin-bottom:15px; padding:20px; border-radius:18px; border:1px solid #f0f0f0; box-shadow:0 4px 10px rgba(0,0,0,0.02);";
-                        
+                        // 1. Initial Booking Request
                         if(b.status === 'pending') {
-                            hasNotif = true;
+                            hasReq = true;
+                            const card = document.createElement('div');
+                            card.style = "background:white; margin-bottom:15px; padding:15px; border-radius:15px; border:1px solid #eee; box-shadow:0 3px 10px rgba(0,0,0,0.02);";
                             card.innerHTML = `
-                                <div style="font-size:0.7rem; font-weight:800; color:var(--primary); margin-bottom:5px;">NEW BOOKING REQUEST</div>
-                                <div style="font-weight:800; font-size:1.1rem; color:#111;">${b.labourName}</div>
-                                <div style="font-size:0.85rem; color:#666; margin:5px 0;">Work: ${b.workName}</div>
-                                <div style="margin:10px 0; background:#f9f9f9; padding:8px 15px; border-radius:30px; display:inline-flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:700;">
-                                    <i class="fa-solid fa-phone" style="color:#27ae60;"></i> ${b.labourMobile}
-                                </div>
-                                <div style="display:flex; gap:10px; margin-top:15px;">
-                                    <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#27ae60; color:white; border:none; padding:12px; border-radius:10px; font-weight:700;">Accept</button>
-                                    <button onclick="handleBooking('${child.key}', 'rejected')" style="flex:1; background:#e74c3c; color:white; border:none; padding:12px; border-radius:10px; font-weight:700;">Reject</button>
+                                <div style="font-weight:700;">${b.labourName} wants to work on:</div>
+                                <div style="color:var(--primary); font-weight:800; margin:5px 0;">${b.workName}</div>
+                                <div style="font-size:0.8rem; color:#666; margin-bottom:10px;"><i class="fa-solid fa-mobile-screen"></i> Mob: ${b.labourMobile || 'Not Provided'}</div>
+                                <div style="display:flex; gap:10px;">
+                                    <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#27ae60; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Accept</button>
+                                    <button onclick="handleBooking('${child.key}', 'rejected')" style="flex:1; background:#e74c3c; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Reject</button>
                                 </div>
                             `;
-                        } else if(b.status === 'finished') {
-                            hasNotif = true;
-                            card.innerHTML = `
-                                <div style="font-size:0.75rem; font-weight:800; color:#27ae60; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> WORK FINISHED BY ${b.labourName.toUpperCase()}</div>
-                                <div style="font-weight:800; font-size:1.1rem; margin-bottom:10px;">Project: ${b.workName}</div>
-                                <img src="${b.finishImage}" style="width:100%; height:220px; object-fit:cover; border-radius:15px; border:2px solid #e8f5e9;">
-                                <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
-                                    <div style="font-size:0.85rem; font-weight:700; color:#333;"><i class="fa-solid fa-phone" style="color:#27ae60;"></i> ${b.labourMobile}</div>
-                                    <button style="background:var(--primary); color:white; border:none; padding:10px 18px; border-radius:12px; font-weight:800; font-size:0.8rem;" onclick="alert('Verification Successful!')">Approve Job</button>
-                                </div>
-                            `;
-                        } else {
-                            card.innerHTML = '';
+                            feed.appendChild(card);
                         }
-                        
-                        if(card.innerHTML) feed.appendChild(card);
+                        // 2. Finish Work Approval Request
+                        else if(b.status === 'awaiting_approval') {
+                            hasReq = true;
+                            const card = document.createElement('div');
+                            card.style = "background:#fffdee; margin-bottom:15px; padding:15px; border-radius:15px; border:1px solid #ffeeba; box-shadow:0 3px 10px rgba(0,0,0,0.05);";
+                            card.innerHTML = `
+                                <div style="font-weight:800; color:#856404;"><i class="fa-solid fa-camera"></i> COMPLETION REQUEST</div>
+                                <div style="font-size:0.9rem; margin-top:5px;"><b>${b.labourName}</b> has finished <b>${b.workName}</b>. Review photo:</div>
+                                <img src="${b.finishImage}" style="width:100%; height:150px; border-radius:10px; margin:10px 0; object-fit:cover; border:2px solid #fff;">
+                                <div style="display:flex; gap:10px;">
+                                    <button onclick="approveFinish('${child.key}')" style="flex:1; background:#27ae60; color:white; border:none; padding:12px; border-radius:8px; font-weight:800;">Approve & Close</button>
+                                    <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#888; color:white; border:none; padding:12px; border-radius:8px; font-weight:800;">Decline</button>
+                                </div>
+                            `;
+                            feed.appendChild(card);
+                        }
                     }
                 });
-                if(!hasNotif) feed.innerHTML = '<div style="padding:50px; text-align:center; color:#aaa;">No new requests or finished jobs.</div>';
+                if(!hasReq) feed.innerHTML = '<div style="padding:50px; text-align:center; color:#aaa;">No current requests.</div>';
             });
         }
+
+        window.approveFinish = async (bid) => {
+            if(!confirm("Approve this work as successfully finished?")) return;
+            try {
+                const bRef = ref(db, `bookings/${bid}`);
+                await set(ref(db, `bookings/${bid}/status`), 'finished');
+                await set(ref(db, `bookings/${bid}/finishedAt`), Date.now());
+                alert("Work successfully marked as FINISHED!");
+            } catch(e) { alert(e.message); }
+        };
 
         window.handleBooking = (bid, status) => {
             onValue(ref(db, `bookings/${bid}`), (snap) => {
                 const b = snap.val();
                 if(b) {
                     set(ref(db, `bookings/${bid}/status`), status);
-                    // If rejected, make the post available again for others
-                    if(status === 'rejected') {
-                        set(ref(db, `posts/${b.postId}/status`), 'available');
-                    }
-                    alert("Booking Update Sent!");
+                    if(status === 'rejected') set(ref(db, `posts/${b.postId}/status`), 'available');
+                    alert("Update Sent!");
                 }
             }, { onlyOnce: true });
         };

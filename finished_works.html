@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Finished Works</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .work-card { background: white; margin: 15px; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        .work-card img { width: 100%; height: 200px; object-fit: cover; }
+        .work-card-body { padding: 15px; }
+        .work-card-body h4 { margin: 0; color: #333; font-size: 1.1rem; }
+        .work-card-body p { margin: 5px 0; color: #777; font-size: 0.85rem; }
+        .badge-success { background: #27ae60; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; float: right; }
+    </style>
+</head>
+<body style="background: #f7f9fc;">
+    <header class="app-header" style="height:70px; background:white; display:flex; align-items:center; padding:0 20px; border-bottom:1px solid #eee; position:sticky; top:0; z-index:100;">
+        <i class="fa-solid fa-arrow-left" style="font-size:1.4rem; cursor:pointer;" onclick="window.history.back()"></i>
+        <h2 style="margin-left:20px; font-size:1.2rem; font-weight:800; color:var(--primary);">Finished <span>Works Archive</span></h2>
+    </header>
+
+    <div id="finishedWorksFeed" style="padding-bottom: 50px;">
+        <div style="text-align:center; padding:50px; color:#aaa;">Loading complete history...</div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB7tt8p6hUZhrGvW58jSFhYFnB--7cI4Dg", authDomain: "ai-pvc.firebaseapp.com", projectId: "ai-pvc", storageBucket: "ai-pvc.firebasestorage.app", messagingSenderId: "674939624886", appId: "1:674939624886:web:7fa074e73af3449929f517" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const uid = localStorage.getItem('userUid');
+        const role = localStorage.getItem('userRole') || 'contractor';
+
+        onValue(ref(db, 'bookings'), (snap) => {
+            const feed = document.getElementById('finishedWorksFeed');
+            feed.innerHTML = '';
+            let count = 0;
+            snap.forEach(child => {
+                const b = child.val();
+                // Show if fully finished
+                if(b.status === 'finished') {
+                    // Filter based on who is logged in
+                    if(b.contractorUid === uid || b.labourUid === uid) {
+                        count++;
+                        const card = document.createElement('div');
+                        card.className = 'work-card';
+                        card.innerHTML = `
+                            <img src="${b.finishImage || 'https://via.placeholder.com/400x200?text=No+Photo'}">
+                            <div class="work-card-body">
+                                <span class="badge-success">COMPLETED</span>
+                                <h4>${b.workName}</h4>
+                                <p><i class="fa-solid fa-user"></i> Labour: ${b.labourName}</p>
+                                <p><i class="fa-solid fa-calendar-check"></i> Date: ${new Date(b.finishedAt || Date.now()).toLocaleDateString()}</p>
+                            </div>
+                        `;
+                        feed.appendChild(card);
+                    }
+                }
+            });
+            if(count === 0) feed.innerHTML = '<div style="text-align:center; padding:100px; color:#aaa;"><i class="fa-solid fa-folder-open" style="font-size:3rem; margin-bottom:15px;"></i><br>No finished works found in your history.</div>';
+        });
+    </script>
+</body>
+</html>
