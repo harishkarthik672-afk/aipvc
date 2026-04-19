@@ -212,19 +212,26 @@
             </div>
         </div>
 
-        <!-- SECTION: MORE (PREMIUM UI) -->
-        <div id="section-more" class="content-section" style="padding-top: 10px;">
-            <div class="more-profile-card" onclick="window.location.href='edit_profile.html'" style="display: flex; align-items: center; gap: 15px; padding: 20px; background: white; margin: 15px; border-radius: 20px; border: 1px solid #f0f0f0; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                <img src="https://ui-avatars.com/api/?name=User" id="moreProfileAvatar" style="width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover;">
+        <!-- SECTION: MORE (PREMIUM UI REFINED) -->
+        <div id="section-more" class="content-section" style="padding: 20px;">
+            <div class="more-profile-card" onclick="window.location.href='edit_profile.html'" style="display: flex; align-items: center; gap: 20px; padding: 25px 20px; background: white; border-radius: 25px; border: 1px solid #f0f0f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 20px;">
+                <img src="https://ui-avatars.com/api/?name=User" id="moreProfileAvatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ff3b30; object-fit: cover; padding: 3px; background: white;">
                 <div class="more-profile-info">
-                    <h3 id="profileNameDisplay" style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #111;">Your Name</h3>
-                    <p style="margin: 3px 0 0; color: #888; font-size: 0.85rem; font-weight: 500;">View and edit details</p>
+                    <h2 id="profileNameDisplay" style="margin: 0; font-size: 1.4rem; font-weight: 800; color: #1a1a1a;">Your Name</h2>
+                    <p style="margin: 5px 0 0; color: #8e8e93; font-size: 0.95rem; font-weight: 500;">View and edit details</p>
                 </div>
-                <i class="fa-solid fa-chevron-right" style="margin-left: auto; color: #ddd; font-size: 0.9rem;"></i>
+                <i class="fa-solid fa-chevron-right" style="margin-left: auto; color: #d1d1d6; font-size: 1.1rem;"></i>
             </div>
-            <div style="background: white; margin: 15px; border-radius: 20px; border: 1px solid #f0f0f0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                <a href="#" class="menu-item-row" style="display: flex; align-items: center; gap: 15px; padding: 18px 20px; border-bottom: 1px solid #f9f9f9; color: #333; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-briefcase" style="color: var(--primary); width: 25px;"></i> My Business Listing</a>
-                <a href="javascript:void(0)" onclick="handleLogout()" style="display: flex; align-items: center; gap: 15px; padding: 18px 20px; color: var(--primary); text-decoration: none; font-weight: 600;"><i class="fa-solid fa-power-off" style="width: 25px;"></i> Log Out</a>
+
+            <div style="background: white; border-radius: 25px; border: 1px solid #f0f0f0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                <a href="business_listing.html" style="display: flex; align-items: center; gap: 18px; padding: 22px 25px; text-decoration: none; border-bottom: 1px solid #f9f9f9;">
+                    <i class="fa-solid fa-briefcase" style="color: #ff3b30; font-size: 1.3rem; width: 25px; text-align: center;"></i>
+                    <span style="color: #1a1a1a; font-size: 1.1rem; font-weight: 700;">My Business Listing</span>
+                </a>
+                <a href="javascript:void(0)" onclick="handleLogout()" style="display: flex; align-items: center; gap: 18px; padding: 22px 25px; text-decoration: none;">
+                    <i class="fa-solid fa-power-off" style="color: #ff3b30; font-size: 1.3rem; width: 25px; text-align: center;"></i>
+                    <span style="color: #ff3b30; font-size: 1.1rem; font-weight: 700;">Log Out</span>
+                </a>
             </div>
         </div>
 
