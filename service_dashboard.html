@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Service Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 4px solid var(--primary); }
+        .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin: 5px 0; }
+        .stat-label { font-size: 0.8rem; color: #777; font-weight: 600; text-transform: uppercase; }
+        
+        .activity-card { background: white; margin: 0 20px; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .activity-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon { width: 40px; height: 40px; border-radius: 10px; background: #fff5f5; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="top-header">
+            <div class="brand-text" onclick="window.history.back()" style="cursor:pointer">
+                <i class="fa-solid fa-arrow-left"></i> <span>DASHBOARD</span>
+            </div>
+            <div class="header-icons">
+                <div class="bell-icon-wrapper"><i class="fa-solid fa-bell"></i></div>
+            </div>
+        </header>
+
+        <!-- Dynamic Statistics -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Earnings</div>
+                <div class="stat-val">₹42,500</div>
+                <div style="font-size: 0.7rem; color: #4caf50;"><i class="fa-solid fa-arrow-up"></i> +12% this month</div>
+            </div>
+            <div class="stat-card" style="border-bottom-color: #2196f3;">
+                <div class="stat-label">Jobs Done</div>
+                <div class="stat-val">18</div>
+                <div style="font-size: 0.7rem; color: #2196f3;">Verified on Network</div>
+            </div>
+            <div class="stat-card" style="border-bottom-color: #ff9800;">
+                <div class="stat-label">Active Enquiries</div>
+                <div class="stat-val">05</div>
+                <div style="font-size: 0.7rem; color: #ff9800;">Pending requests</div>
+            </div>
+            <div class="stat-card" style="border-bottom-color: #9c27b0;">
+                <div class="stat-label">Profile Views</div>
+                <div class="stat-val">1.2k</div>
+                <div style="font-size: 0.7rem; color: #9c27b0;">Trending status</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <h4 style="padding: 10px 25px; color: var(--text-dark);">Recent System Activity</h4>
+        <div class="activity-card">
+            <div class="activity-item">
+                <div class="activity-icon"><i class="fa-solid fa-check-double"></i></div>
+                <div><div style="font-weight:700; font-size: 0.9rem;">Identity Verified</div><div style="font-size:0.75rem; color:#888;">Your Aadhaar KYC is now active.</div></div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon" style="background: #e3f2fd; color: #2196f3;"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                <div><div style="font-weight:700; font-size: 0.9rem;">Skills Updated</div><div style="font-size:0.75rem; color:#888;">Added "Premium PVC Fitting" to skills.</div></div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon" style="background: #e8f5e9; color: #4caf50;"><i class="fa-solid fa-wallet"></i></div>
+                <div><div style="font-weight:700; font-size: 0.9rem;">Payment Received</div><div style="font-size:0.75rem; color:#888;">₹5,000 for site ID #8841.</div></div>
+            </div>
+        </div>
+
+        <div style="padding: 20px;">
+            <button class="btn-primary" style="width: 100%; padding: 15px; border-radius: 40px;" onclick="window.history.back()">Return to Portal</button>
+        </div>
+    </div>
+</body>
+</html>

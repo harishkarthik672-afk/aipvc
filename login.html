@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Login & Sign Up</title>
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Brand Panel -->
+        <div class="brand-panel">
+            <div class="brand-content">
+                <!-- Welcome Text -->
+                <h2 class="welcome-heading">Welcome</h2>
+                <h1 class="welcome-sub">to AI PVC</h1>
+                <p class="welcome-desc">Welcome to the All India PVC Network. Connect, collaborate, and grow with the ultimate network for PVC professionals.</p>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="form-panel">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 id="main-header-title">Log in</h2>
+                    <p id="main-header-desc">Enter your details to access your account</p>
+                </div>
+                
+                <!-- Form Container with Full Height Flex -->
+                <form action="#" id="authForm" onsubmit="event.preventDefault();" style="display: flex; flex-direction: column; flex: 1;">
+                    
+                    <!-- Role Selector -->
+                    <div class="role-selector" id="role-selector-container">
+                        <input type="radio" id="contractor" name="role" value="contractor" checked>
+                        <label for="contractor">Contractor</label>
+                        
+                        <input type="radio" id="labour" name="role" value="labour">
+                        <label for="labour">Labour</label>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- LOGIN SECTION                                  -->
+                    <!-- ============================================== -->
+                    <div id="login-only-fields" style="display: flex; flex-direction: column; flex: 1;">
+                        <div class="input-group">
+                            <label for="login-email">Email :</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="login-password">Password :</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+
+                        <!-- Buttons anchored to the bottom -->
+                        <div style="margin-top: auto;">
+                            <button type="submit" class="btn-primary" onclick="handleManualLogin()">Log In</button>
+                            
+                            <div class="divider">
+                                <span>OR</span>
+                            </div>
+
+                            <button type="button" class="btn-google">
+                                <svg viewBox="0 0 48 48" style="width: 18px; height: 18px; margin-right: 10px;">
+                                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                    <path fill="none" d="M0 0h48v48H0z"/>
+                                </svg>
+                                Continue with Google
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================== -->
+                    <!-- MULTI-STEP SIGNUP WIZARD                       -->
+                    <!-- ============================================== -->
+                    <div id="signup-steps" style="display: none; flex-direction: column; flex: 1;">
+                        
+                        <!-- STEP 1 -> Account Details -->
+                        <div class="form-step active" id="step-1" style="display: flex; flex-direction: column; flex: 1;">
+                            <div class="input-group">
+                                <label>Username :</label>
+                                <input type="text" placeholder="Enter your username">
+                            </div>
+                            <div class="input-group">
+                                <label>Email :</label>
+                                <input type="email" placeholder="Enter your email">
+                            </div>
+                            <div class="input-group">
+                                <label>Password :</label>
+                                <input type="password" placeholder="Create a password">
+                            </div>
+                            <div class="terms-group">
+                                <label class="terms-checkbox">
+                                    <input type="checkbox" id="terms">
+                                    <span>I accept terms and policy</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-top: auto;">
+                                <button type="button" class="btn-primary" onclick="nextStep()" style="margin-bottom: 0;">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2 -> Profile Setup -->
+                        <div class="form-step" id="step-2" style="display: none; flex-direction: column; flex: 1;">
+                            <div class="profile-upload" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                                <label for="profileImg" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; color: var(--primary); font-size: 0.85rem; font-weight: 500;">
+                                    <div id="imagePreviewContainer" style="display:flex; justify-content:center; align-items:center; width:80px; height:80px; border-radius:50%; border:2px dashed var(--primary); margin-bottom: 0.5rem; color: var(--primary); font-size: 30px; overflow: hidden;">
+                                        <i class="fa-solid fa-camera"></i>
+                                    </div>
+                                    <span>Upload Profile Image</span>
+                                </label>
+                                <input type="file" id="profileImg" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                            </div>
+                            <div class="input-group">
+                                <label>Full Name :</label>
+                                <input type="text" placeholder="Enter your full name">
+                            </div>
+                            
+                            <div class="step-buttons" style="margin-top: auto;">
+                                <button type="button" class="btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn-primary" onclick="nextStep()" style="margin-bottom: 0;">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3 -> Identity Verification -->
+                        <div class="form-step" id="step-3" style="display: none; flex-direction: column; flex: 1;">
+                            <div class="input-group">
+                                <label>Mobile Number :</label>
+                                <input type="tel" id="userMobile" placeholder="Enter mobile number">
+                            </div>
+                            <div class="input-group">
+                                <label>Aadhaar Number :</label>
+                                <input type="text" placeholder="Enter 12-digit Aadhaar number">
+                            </div>
+                            <div class="input-group">
+                                <label>PAN Number :</label>
+                                <input type="text" placeholder="Enter PAN number">
+                            </div>
+                            
+                            <div class="step-buttons" style="margin-top: auto;">
+                                <button type="button" class="btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn-primary" onclick="nextStep()" style="margin-bottom: 0;">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4 -> Address & Business Details -->
+                        <div class="form-step" id="step-4" style="display: none; flex-direction: column; flex: 1;">
+                            <div class="input-group">
+                                <label>Personal Address :</label>
+                                <textarea rows="2" placeholder="Enter your full home address" style="width: 100%; padding: 10px; border: 1px solid var(--input-border); border-radius: 4px; outline: none; transition: border-color 0.3s; font-size: 0.85rem; font-family: 'Outfit', sans-serif; resize: vertical;"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label>Store Name :</label>
+                                <input type="text" placeholder="Enter your store / business name">
+                            </div>
+                            <div class="input-group">
+                                <label>District :</label>
+                                <select id="userDistrict" style="width: 100%; padding: 10px; border: 1px solid var(--input-border); border-radius: 4px; outline: none; transition: border-color 0.3s; font-size: 0.85rem; font-family: 'Outfit', sans-serif; background-color: white;">
+                                    <option value="" disabled selected>Select District</option>
+                                    <option value="ariyalur">Ariyalur</option>
+                                    <option value="chengalpattu">Chengalpattu</option>
+                                    <option value="chennai">Chennai</option>
+                                    <option value="coimbatore">Coimbatore</option>
+                                    <option value="cuddalore">Cuddalore</option>
+                                    <option value="dharmapuri">Dharmapuri</option>
+                                    <option value="dindigul">Dindigul</option>
+                                    <option value="erode">Erode</option>
+                                    <option value="kallakurichi">Kallakurichi</option>
+                                    <option value="kanchipuram">Kanchipuram</option>
+                                    <option value="kanyakumari">Kanyakumari</option>
+                                    <option value="karur">Karur</option>
+                                    <option value="krishnagiri">Krishnagiri</option>
+                                    <option value="madurai">Madurai</option>
+                                    <option value="mayiladuthurai">Mayiladuthurai</option>
+                                    <option value="nagapattinam">Nagapattinam</option>
+                                    <option value="namakkal">Namakkal</option>
+                                    <option value="nilgiris">Nilgiris</option>
+                                    <option value="perambalur">Perambalur</option>
+                                    <option value="pudukkottai">Pudukkottai</option>
+                                    <option value="ramanathapuram">Ramanathapuram</option>
+                                    <option value="ranipet">Ranipet</option>
+                                    <option value="salem">Salem</option>
+                                    <option value="sivaganga">Sivaganga</option>
+                                    <option value="tenkasi">Tenkasi</option>
+                                    <option value="thanjavur">Thanjavur</option>
+                                    <option value="theni">Theni</option>
+                                    <option value="thoothukudi">Thoothukudi</option>
+                                    <option value="tiruchirappalli">Tiruchirappalli</option>
+                                    <option value="tirunelveli">Tirunelveli</option>
+                                    <option value="tirupattur">Tirupattur</option>
+                                    <option value="tiruppur">Tiruppur</option>
+                                    <option value="tiruvallur">Tiruvallur</option>
+                                    <option value="tiruvannamalai">Tiruvannamalai</option>
+                                    <option value="tiruvarur">Tiruvarur</option>
+                                    <option value="vellore">Vellore</option>
+                                    <option value="viluppuram">Viluppuram</option>
+                                    <option value="virudhunagar">Virudhunagar</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Store Address :</label>
+                                <textarea rows="2" placeholder="Enter your store address" style="width: 100%; padding: 10px; border: 1px solid var(--input-border); border-radius: 4px; outline: none; transition: border-color 0.3s; font-size: 0.85rem; font-family: 'Outfit', sans-serif; resize: vertical;"></textarea>
+                            </div>
+                            
+                            <div class="step-buttons" style="margin-top: auto;">
+                                <button type="button" class="btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn-primary" style="margin-bottom: 0;" onclick="handleManualLogin()">Complete</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <!-- Toggle Mode Text -->
+                <div id="auth-switch-section">
+                    <p class="auth-switch">
+                        Don't have an account? <a href="#" onclick="toggleAuth(event)">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script to toggle auth modes and steps -->
+    <script>
+        // Check Session Persistence immediately
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.replace('dashboard.html');
+        }
+
+        let isLogin = true;
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function handleManualLogin() {
+            localStorage.setItem('isLoggedIn', 'true');
+            const mobile = document.getElementById('userMobile').value;
+            const district = document.getElementById('userDistrict').value;
+            if(mobile) localStorage.setItem('userMobile', mobile);
+            if(district) localStorage.setItem('userDistrict', district);
+            if(!localStorage.getItem('userUid')) localStorage.setItem('userUid', 'user_' + Math.random().toString(36).substr(2, 9));
+
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+            if (selectedRole === 'contractor') {
+                window.location.href = 'contractor.html';
+            } else {
+                window.location.href = 'labour.html';
+            }
+        }
+
+        function toggleAuth(e) {
+            e.preventDefault();
+            isLogin = !isLogin;
+            currentStep = 1; // Reset to step 1
+            updateView();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateView();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateView();
+            }
+        }
+
+        function updateView() {
+            const loginFields = document.getElementById('login-only-fields');
+            const signupSteps = document.getElementById('signup-steps');
+            const roleSelector = document.getElementById('role-selector-container');
+            const authSwitchSection = document.getElementById('auth-switch-section');
+            const headerTitle = document.getElementById('main-header-title');
+            const headerDesc = document.getElementById('main-header-desc');
+
+            if (isLogin) {
+                // Show Login Mode
+                headerTitle.innerText = 'Log in';
+                headerDesc.innerText = 'Enter your details to access your account';
+                loginFields.style.display = 'flex'; // Uses flex to push buttons down
+                signupSteps.style.display = 'none';
+                roleSelector.style.display = 'flex';
+                authSwitchSection.style.display = 'block';
+                authSwitchSection.innerHTML = '<p class="auth-switch">Don\'t have an account? <a href="#" onclick="toggleAuth(event)">Sign Up</a></p>';
+            } else {
+                // Show Signup Mode
+                loginFields.style.display = 'none';
+                signupSteps.style.display = 'flex'; // Flex container for steps
+
+                // Display Only Current Step
+                for (let i = 1; i <= totalSteps; i++) {
+                    const stepEl = document.getElementById(`step-${i}`);
+                    if(stepEl) stepEl.style.display = (i === currentStep) ? 'flex' : 'none'; // Flex required for margin-top: auto
+                }
+
+                // Header / Role Configuration
+                if (currentStep === 1) {
+                    headerTitle.innerText = 'Sign Up';
+                    headerDesc.innerText = 'Step 1: Account Setup';
+                    roleSelector.style.display = 'flex';
+                    authSwitchSection.style.display = 'block';
+                    authSwitchSection.innerHTML = '<p class="auth-switch">Already have an account? <a href="#" onclick="toggleAuth(event)">Log in</a></p>';
+                } else if (currentStep === 2) {
+                    headerTitle.innerText = 'Profile Data';
+                    headerDesc.innerText = 'Step 2: Setup your profile image and name';
+                    roleSelector.style.display = 'none';
+                    authSwitchSection.style.display = 'none';
+                } else if (currentStep === 3) {
+                    headerTitle.innerText = 'Identity Verification';
+                    headerDesc.innerText = 'Step 3: Secure your identity details for network trust';
+                    roleSelector.style.display = 'none';
+                    authSwitchSection.style.display = 'none';
+                } else if (currentStep === 4) {
+                    headerTitle.innerText = 'Business Location';
+                    headerDesc.innerText = 'Step 4: Connect your storefront and location';
+                    roleSelector.style.display = 'none';
+                    authSwitchSection.style.display = 'none';
+                }
+            }
+        }
+
+        // Image Preview Handler
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    const container = document.getElementById('imagePreviewContainer');
+                    container.innerHTML = `<img src="${dataUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    container.style.border = 'none';
+                    localStorage.setItem('userAvatarUrl', dataUrl);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+    <!-- Firebase Google Authentication Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-analytics.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7tt8p6hUZhrGvW58jSFhYFnB--7cI4Dg",
+            authDomain: "ai-pvc.firebaseapp.com",
+            projectId: "ai-pvc",
+            storageBucket: "ai-pvc.firebasestorage.app",
+            messagingSenderId: "674939624886",
+            appId: "1:674939624886:web:7fa074e73af3449929f517",
+            measurementId: "G-QQDLCTM6MR"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Attach event listeners to all Google login buttons
+        const googleLoginBtns = document.querySelectorAll('.btn-google');
+        googleLoginBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    const user = result.user;
+                    console.log("Success! Logged in as:", user.displayName);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    if (user.photoURL) {
+                        localStorage.setItem('userAvatarUrl', user.photoURL);
+                    } else if (user.displayName) {
+                        localStorage.setItem('userAvatarUrl', `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=4285f4&color=fff`);
+                    }
+                    const selectedRole = document.querySelector('input[name="role"]:checked').value;
+                    if (selectedRole === 'contractor') {
+                        window.location.href = "contractor.html";
+                    } else {
+                        window.location.href = "labour.html";
+                    }
+                } catch (error) {
+                    console.error("Authentication Error:", error.code, error.message);
+                    alert("Google Login Failed: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

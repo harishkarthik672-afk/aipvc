@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - ID Card</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .id-card-wrapper { background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); width: 100%; border-radius: 20px; padding: 25px; color: white; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .id-card-wrapper::after { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: rgba(255,255,255,0.05); transform: rotate(45deg); pointer-events: none; }
+        .chip { width: 45px; height: 35px; background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); border-radius: 6px; margin-bottom: 20px; }
+        .id-number { font-family: 'Courier New', monospace; font-size: 1.4rem; letter-spacing: 2px; margin: 15px 0; }
+        .id-label { font-size: 0.65rem; text-transform: uppercase; color: #aaa; letter-spacing: 1px; }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
+        <header class="top-header">
+            <div class="brand-text" onclick="window.history.back()" style="cursor:pointer">
+                <i class="fa-solid fa-arrow-left"></i> <span>AI PVC IDENTITY</span>
+            </div>
+        </header>
+        <div style="padding: 20px;">
+            <div class="id-card-wrapper">
+                <div style="display:flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="chip"></div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" style="width: 60px; height: 60px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);">
+                </div>
+                <div class="id-number">**** **** 8821</div>
+                <div style="display:flex; justify-content: space-between; margin-top: 10px;">
+                    <div><div class="id-label">Verified Member</div><div style="font-weight: 600;">TAMIL NADU PVC NETWORK</div></div>
+                    <div style="text-align: right;"><div class="id-label">Valid Thru</div><div style="font-weight: 600;">12/28</div></div>
+                </div>
+            </div>
+            
+            <div style="background: white; padding: 25px; border-radius: 20px; margin-top: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                <h3 style="margin-bottom: 15px;">Membership Benefits</h3>
+                <ul style="padding: 0; list-style: none; color: #666; font-size: 0.9rem;">
+                    <li style="margin-bottom: 10px;"><i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 10px;"></i> Verified Professional Status</li>
+                    <li style="margin-bottom: 10px;"><i class="fa-solid fa-percent" style="color: var(--primary); margin-right: 10px;"></i> Exclusive Store Discounts</li>
+                    <li><i class="fa-solid fa-hospital-user" style="color: var(--primary); margin-right: 10px;"></i> Group Insurance Access</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%; margin-top: 20px; padding: 12px; border-radius: 10px;">Download Digital ID</button>
+            </div>
+            
+            <button class="btn-primary" style="margin-top: 30px; width: 100%; border-radius: 40px; background: none; border: 2px solid var(--primary); color: var(--primary);" onclick="window.history.back()">Back</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Create Post</title>
+    <script>if(localStorage.getItem('isLoggedIn') !== 'true') window.location.replace('login.html');</script>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
+        
+        <!-- Standard Global Header -->
+        <header class="top-header">
+            <div class="brand-text">
+                AI <span>PVC</span>
+            </div>
+            <div class="header-icons">
+                <i class="fa-regular fa-bell bell-icon" onclick="window.location.href='notifications.html'" style="cursor: pointer;"></i>
+                <img src="https://ui-avatars.com/api/?name=User&background=random" id="navAvatar1" class="profile-avatar">
+                <script>if(localStorage.getItem('userAvatarUrl')) document.getElementById('navAvatar1').src = localStorage.getItem('userAvatarUrl');</script>
+            </div>
+        </header>
+
+        <!-- Standard Search Bar -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search PVC network near me">
+                <i class="fa-solid fa-microphone mic-icon"></i>
+            </div>
+        </div>
+
+        <!-- Post Content -->
+        <div style="padding: 20px;">
+            <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                
+                <h3 style="margin-bottom: 20px; color: var(--primary);">Publish New Work</h3>
+
+                <!-- Work Name -->
+                <div class="input-group">
+                    <label>Work Name :</label>
+                    <input type="text" id="workName" placeholder="Enter work title" style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 6px; font-family: 'Outfit'; margin-bottom: 15px; outline: none;">
+                </div>
+
+                <!-- Square Fit -->
+                <div class="input-group">
+                    <label>Square Fit (Area) :</label>
+                    <input type="text" id="squareFit" placeholder="e.g. 1500 sq ft" style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 6px; font-family: 'Outfit'; margin-bottom: 15px; outline: none;">
+                </div>
+
+                <!-- Address -->
+                <div class="input-group">
+                    <label>Address :</label>
+                    <textarea id="address" rows="2" placeholder="Full address details" style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 6px; font-family: 'Outfit'; margin-bottom: 15px; outline: none; resize: none;"></textarea>
+                </div>
+
+                <!-- District Dropdown -->
+                <div class="input-group">
+                    <label>District :</label>
+                    <select id="district" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; margin-bottom: 15px; font-family: 'Outfit'; background-color: white;">
+                        <option value="" disabled selected>Select District</option>
+                        <option value="Ariyalur">Ariyalur</option>
+                        <option value="Chengalpattu">Chengalpattu</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Coimbatore">Coimbatore</option>
+                        <option value="Cuddalore">Cuddalore</option>
+                        <option value="Dharmapuri">Dharmapuri</option>
+                        <option value="Dindigul">Dindigul</option>
+                        <option value="Erode">Erode</option>
+                        <option value="Kallakurichi">Kallakurichi</option>
+                        <option value="Kanchipuram">Kanchipuram</option>
+                        <option value="Kanyakumari">Kanyakumari</option>
+                        <option value="Karur">Karur</option>
+                        <option value="Krishnagiri">Krishnagiri</option>
+                        <option value="Madurai">Madurai</option>
+                        <option value="Mayiladuthurai">Mayiladuthurai</option>
+                        <option value="Nagapattinam">Nagapattinam</option>
+                        <option value="Namakkal">Namakkal</option>
+                        <option value="Nilgiris">Nilgiris</option>
+                        <option value="Perambalur">Perambalur</option>
+                        <option value="Pudukkottai">Pudukkottai</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Ranipet">Ranipet</option>
+                        <option value="Salem">Salem</option>
+                        <option value="Sivaganga">Sivaganga</option>
+                        <option value="Tenkasi">Tenkasi</option>
+                        <option value="Thanjavur">Thanjavur</option>
+                        <option value="Theni">Theni</option>
+                        <option value="Thoothukudi">Thoothukudi</option>
+                        <option value="Tiruchirappalli">Tiruchirappalli</option>
+                        <option value="Tirunelveli">Tirunelveli</option>
+                        <option value="Tirupattur">Tirupattur</option>
+                        <option value="Tiruppur">Tiruppur</option>
+                        <option value="Tiruvallur">Tiruvallur</option>
+                        <option value="Tiruvannamalai">Tiruvannamalai</option>
+                        <option value="Tiruvarur">Tiruvarur</option>
+                        <option value="Vellore">Vellore</option>
+                        <option value="Viluppuram">Viluppuram</option>
+                        <option value="Virudhunagar">Virudhunagar</option>
+                    </select>
+                </div>
+                
+                <!-- Image Upload -->
+                <div class="input-group">
+                    <label>Work Photo :</label>
+                    <label for="postImg" style="display: block; padding: 12px 15px; border: 1px dashed var(--primary); background: #fff5f5; color: var(--primary); border-radius: 8px; cursor: pointer; text-align: center; margin-bottom: 5px;">
+                        <i class="fa-solid fa-camera"></i> <span style="font-size: 0.85rem; font-weight: 500; margin-left: 5px;">Upload Work Photo</span>
+                    </label>
+                    <input type="file" id="postImg" accept="image/*" style="display: none;">
+                    
+                    <div id="imgPreviewWrapper" style="display: none; height: 150px; border-radius: 8px; overflow: hidden; margin-top: 10px; margin-bottom: 15px; border: 1px solid #ddd;">
+                        <img id="imgPreview" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div id="loader" style="display: none; text-align: center; color: var(--primary); font-weight: bold; margin-bottom: 15px;"><i class="fa-solid fa-spinner fa-spin"></i> Saving to Database...</div>
+
+                <button id="publishBtn" class="btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">Publish Post</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="post.html" class="nav-item active">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Post</span>
+            </a>
+            <a href="mypost.html" class="nav-item">
+                <i class="fa-solid fa-images"></i>
+                <span>My Post</span>
+            </a>
+            <a href="news.html" class="nav-item">
+                <div class="nav-badge-wrapper">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <span class="nav-badge">4</span>
+                </div>
+                <span>News</span>
+            </a>
+            <a href="more.html" class="nav-item">
+                <i class="fa-solid fa-bars"></i>
+                <span>More</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7tt8p6hUZhrGvW58jSFhYFnB--7cI4Dg",
+            authDomain: "ai-pvc.firebaseapp.com",
+            projectId: "ai-pvc",
+            storageBucket: "ai-pvc.firebasestorage.app",
+            messagingSenderId: "674939624886",
+            appId: "1:674939624886:web:7fa074e73af3449929f517"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let base64Image = "";
+
+        // Handle Image Local Preview and Base64 conversion
+        document.getElementById('postImg').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64Image = event.target.result;
+                    document.getElementById('imgPreview').src = base64Image;
+                    document.getElementById('imgPreviewWrapper').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('publishBtn').addEventListener('click', async () => {
+            const workName = document.getElementById('workName').value;
+            const squareFit = document.getElementById('squareFit').value;
+            const address = document.getElementById('address').value;
+            const district = document.getElementById('district').value;
+            const avatar = localStorage.getItem('userAvatarUrl') || "https://ui-avatars.com/api/?name=User";
+
+            if(!workName || !squareFit || !address || !district) {
+                alert("Please fill in all the details.");
+                return;
+            }
+
+            document.getElementById('publishBtn').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            try {
+                await push(ref(db, "posts"), {
+                    workName: workName,
+                    squareFit: squareFit,
+                    address: address,
+                    district: district,
+                    image: base64Image,
+                    userAvatar: avatar,
+                    createdAt: serverTimestamp()
+                });
+                
+                alert("Post successfully published to server!");
+                window.location.href = "mypost.html";
+            } catch (e) {
+                console.error("Error adding data: ", e);
+                alert("Error connecting to server. Please try again.");
+                document.getElementById('publishBtn').style.display = 'block';
+                document.getElementById('loader').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - More Menu</title>
+    <script>if(localStorage.getItem('isLoggedIn') !== 'true') window.location.replace('login.html');</script>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .menu-profile { padding: 30px 20px; background: white; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .menu-profile img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .menu-profile-info h3 { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 2px; }
+        .menu-profile-info p { font-size: 0.85rem; color: var(--text-gray); }
+        
+        .menu-group { background: white; margin-bottom: 10px; }
+        .menu-item { display: flex; align-items: center; gap: 15px; padding: 16px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-dark); text-decoration: none; font-weight: 500; font-size: 0.95rem; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item i.menu-icon { font-size: 1.1rem; color: var(--primary); width: 24px; text-align: center; }
+        .menu-item i.chevron { margin-left: auto; color: #ccc; font-size: 0.9rem; }
+        .menu-item.danger-text { color: #dc3545; }
+        .menu-item.danger-text i.menu-icon { color: #dc3545; }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
+        
+        <!-- Standard Global Header -->
+        <header class="top-header">
+            <div class="brand-text">
+                AI <span>PVC</span>
+            </div>
+            <div class="header-icons">
+                <i class="fa-regular fa-bell bell-icon" onclick="window.location.href='notifications.html'" style="cursor: pointer;"></i>
+                <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="profile-avatar" id="navAvatar4">
+                <script>if(localStorage.getItem('userAvatarUrl')) document.getElementById('navAvatar4').src = localStorage.getItem('userAvatarUrl');</script>
+            </div>
+        </header>
+
+        <!-- Standard Search Bar -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search PVC network near me">
+                <i class="fa-solid fa-microphone mic-icon"></i>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="menu-profile" onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <img src="https://ui-avatars.com/api/?name=User" id="moreProfileAvatar">
+            <div class="menu-profile-info">
+                <h3>Your Profile</h3>
+                <p>View and edit details</p>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="margin-left: auto; color: #ccc;"></i>
+        </div>
+
+        <!-- Action Links -->
+        <div class="menu-group">
+            <a href="business_listing.html" class="menu-item">
+                <i class="fa-solid fa-briefcase menu-icon"></i> My Business Listing
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+            <a href="payment.html" class="menu-item">
+                <i class="fa-solid fa-wallet menu-icon"></i> Wallet & Payments
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+            <a href="saved_posts.html" class="menu-item">
+                <i class="fa-solid fa-bookmark menu-icon"></i> Saved Posts
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+        </div>
+
+        <!-- Settings Links -->
+        <div class="menu-group">
+            <a href="settings.html" class="menu-item">
+                <i class="fa-solid fa-gear menu-icon"></i> Settings & Privacy
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+            <a href="support.html" class="menu-item">
+                <i class="fa-solid fa-circle-info menu-icon"></i> Help & Support
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+            <a href="rate.html" class="menu-item">
+                <i class="fa-solid fa-star menu-icon"></i> Rate AI PVC Network
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </a>
+        </div>
+
+        <!-- Logout Action -->
+        <div class="menu-group">
+            <a href="#" class="menu-item danger-text" onclick="handleLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i> Log Out
+            </a>
+        </div>
+
+        <div style="text-align: center; padding: 20px; color: var(--text-gray); font-size: 0.75rem;">
+            AI PVC Network v1.0<br>Powered by Syro Tech Hub
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="post.html" class="nav-item">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Post</span>
+            </a>
+            <a href="mypost.html" class="nav-item">
+                <i class="fa-solid fa-images"></i>
+                <span>My Post</span>
+            </a>
+            <a href="news.html" class="nav-item">
+                <div class="nav-badge-wrapper">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <span class="nav-badge">4</span>
+                </div>
+                <span>News</span>
+            </a>
+            <a href="more.html" class="nav-item active">
+                <i class="fa-solid fa-bars"></i>
+                <span>More</span>
+            </a>
+        </nav>
+
+    </div>
+    <script>
+        // Load custom avatar
+        const storedAvatar = localStorage.getItem('userAvatarUrl');
+        if (storedAvatar) document.getElementById('moreProfileAvatar').src = storedAvatar;
+
+        function handleLogout() {
+            if(confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem('isLoggedIn');
+                window.location.replace('login.html');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Estimator</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .calc-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 20px; }
+        .calc-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 20px; font-family: 'Outfit'; font-size: 1rem; outline: none; transition: 0.3s; }
+        .calc-input:focus { border-color: var(--primary); }
+        .result-box { background: #fff5f5; border: 2px dashed var(--primary); padding: 20px; border-radius: 12px; text-align: center; display: none; margin-top: 10px; }
+        .result-amount { font-size: 2rem; font-weight: 800; color: var(--primary); }
+    </style>
+</head>
+<body style="background-color: var(--bg-light);">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="top-header">
+            <div class="brand-text" onclick="window.history.back()" style="cursor:pointer">
+                <i class="fa-solid fa-arrow-left"></i> AI <span>ESTIMATOR</span>
+            </div>
+            <div class="header-icons">
+                <div class="bell-icon-wrapper"><i class="fa-solid fa-bell"></i></div>
+            </div>
+        </header>
+
+        <div style="padding: 20px;">
+            <p style="color: #666; margin-bottom: 20px;">Calculate approximate work cost based on area and materials.</p>
+            
+            <div class="calc-card">
+                <label style="font-weight: 600; display: block; margin-bottom: 10px;">Square Feet (Area)</label>
+                <input type="number" id="sqft" class="calc-input" placeholder="e.g. 1500">
+                
+                <label style="font-weight: 600; display: block; margin-bottom: 10px;">Select Material Grade</label>
+                <select id="grade" class="calc-input">
+                    <option value="120">Basic (₹120/sqft)</option>
+                    <option value="180">Standard (₹180/sqft)</option>
+                    <option value="250">Premium (₹250/sqft)</option>
+                </select>
+
+                <button class="btn-primary" style="width: 100%; padding: 15px;" onclick="calculate()">Calculate Now</button>
+            </div>
+
+            <div id="result" class="result-box">
+                <p style="color: #666; font-size: 0.9rem;">Estimated Total Cost</p>
+                <div class="result-amount" id="totalAmount">₹0</div>
+                <p style="font-size: 0.75rem; color: #999; margin-top: 10px;">*Prices are approximate and exclude GST.</p>
+            </div>
+        </div>
+
+        <!-- Floating Back to Portal -->
+        <button class="btn-primary" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 300px; padding: 15px; border-radius: 40px; box-shadow: 0 10px 25px rgba(255,0,0,0.3);" onclick="window.history.back()">Back to Portal</button>
+    </div>
+
+    <script>
+        function calculate() {
+            const sqft = document.getElementById('sqft').value;
+            const grade = document.getElementById('grade').value;
+            if(!sqft) return alert("Enter area in sqft");
+            
+            const total = sqft * grade;
+            document.getElementById('totalAmount').innerText = '₹' + total.toLocaleString('en-IN');
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

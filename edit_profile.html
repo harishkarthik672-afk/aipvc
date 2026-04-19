@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Your Profile - Edit Info</title>
+    
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background: #fff !important; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        .app-header { position: fixed; top: 0; width: 100%; height: 70px; background: white; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; border-bottom: 1px solid #f0f0f0; z-index: 1000; justify-content: space-between; }
+        .back-btn { font-size: 1.5rem; color: #333; cursor: pointer; }
+        .page-title { font-weight: 800; font-size: 1.3rem; color: var(--primary); }
+        
+        .main-content { padding-top: 90px; padding-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Profile Image Edit Section */
+        .avatar-edit-container { position: relative; margin-bottom: 30px; }
+        .avatar-wrapper img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; object-position: center; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .edit-icon-label { position: absolute; bottom: 5px; right: 5px; background: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 3px solid #fff; cursor: pointer; box-shadow: 0 5px 10px rgba(234, 67, 53, 0.3); }
+
+        /* Form Styling */
+        .profile-form { width: 100%; padding: 0 30px; box-sizing: border-box; }
+        .input-box { margin-bottom: 25px; }
+        .input-box label { display: block; font-weight: 700; font-size: 0.85rem; color: #aaa; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.8px; }
+        .input-box input, .input-box textarea, .input-box select { width: 100%; background: #f8f9fa; border: 2px solid #f1f1f1; border-radius: 15px; padding: 18px; font-family: 'Outfit'; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-box input:focus, .input-box textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 5px 20px rgba(234, 67, 53, 0.05); }
+
+        .save-button { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 30px rgba(234, 67, 53, 0.3); margin-top: 15px; }
+        .save-button:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <i class="fa-solid fa-arrow-left back-btn" onclick="goDashboard()"></i>
+        <div class="page-title">Edit <span>Profile</span></div>
+        <i class="fa-solid fa-check" style="font-size: 1.4rem; color: var(--primary); cursor: pointer;" onclick="saveChanges()"></i>
+    </header>
+
+    <div class="main-content">
+        <!-- Image Section -->
+        <div class="avatar-edit-container">
+            <img src="https://ui-avatars.com/api/?name=User" id="profImg">
+            <label for="imgLoader" class="edit-icon-label"><i class="fa-solid fa-camera"></i></label>
+            <input type="file" id="imgLoader" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Form Section -->
+        <div class="profile-form">
+            <div class="input-box">
+                <label>Update Your Full Name</label>
+                <input type="text" id="nameText" placeholder="Enter your business/full name">
+            </div>
+
+            <div class="input-box">
+                <label>Select State</label>
+                <select id="stateSelect">
+                    <option value="tamilnadu">Tamil Nadu</option>
+                    <option value="kerala">Kerala</option>
+                    <option value="karnataka">Karnataka</option>
+                    <option value="andhra">Andhra Pradesh</option>
+                    <option value="telangana">Telangana</option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <label>District Info</label>
+                <input type="text" id="distText" placeholder="Enter your district name">
+            </div>
+
+            <div class="input-box">
+                <label>Current Address</label>
+                <textarea id="addrText" style="height: 100px; resize: none;" placeholder="Full office/site address"></textarea>
+            </div>
+
+            <button class="save-button" onclick="saveChanges()" id="updateBtn">Save & Update Profile</button>
+            <div id="loaderUI" style="display: none; text-align: center; color: var(--primary); padding-top: 20px; font-weight: 700;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Syncing...
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB7tt8p6hUZhrGvW58jSFhYFnB--7cI4Dg", authDomain: "ai-pvc.firebaseapp.com", projectId: "ai-pvc", storageBucket: "ai-pvc.firebasestorage.app", messagingSenderId: "674939624886", appId: "1:674939624886:web:7fa074e73af3449929f517" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const uid = localStorage.getItem('userUid');
+
+        // Load existing one
+        window.onload = async () => {
+            const n = localStorage.getItem('userName');
+            if(n) { document.getElementById('nameText').value = n; }
+            document.getElementById('stateSelect').value = localStorage.getItem('userState') || 'tamilnadu';
+            document.getElementById('distText').value = localStorage.getItem('userDistrict') || '';
+            document.getElementById('addrText').value = localStorage.getItem('userAddress') || '';
+            const p = localStorage.getItem('userAvatarUrl');
+            if(p) document.getElementById('profImg').src = p;
+
+            // Sync from Database for safety
+            try {
+                const snapshot = await get(child(ref(db), `users/${uid}`));
+                if(snapshot.exists()) {
+                    const d = snapshot.val();
+                    document.getElementById('nameText').value = d.name || '';
+                    document.getElementById('stateSelect').value = d.state || 'tamilnadu';
+                    document.getElementById('distText').value = d.district || '';
+                    document.getElementById('addrText').value = d.address || '';
+                    if(d.avatar) document.getElementById('profImg').src = d.avatar;
+                }
+            } catch(e) {}
+        }
+
+        // Photo pick
+        document.getElementById('imgLoader').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = ev => document.getElementById('profImg').src = ev.target.result;
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save functionality
+        window.saveChanges = async () => {
+            const name = document.getElementById('nameText').value;
+            const state = document.getElementById('stateSelect').value;
+            const dist = document.getElementById('distText').value;
+            const addr = document.getElementById('addrText').value;
+            const avatar = document.getElementById('profImg').src;
+
+            if(!name) return alert("Full Name Required!");
+
+            document.getElementById('updateBtn').style.display = 'none';
+            document.getElementById('loaderUI').style.display = 'block';
+
+            try {
+                const role = localStorage.getItem('userRole') || 'contractor';
+                await set(ref(db, `users/${uid}`), {
+                    name, state, district: dist, address: addr, avatar,
+                    role, mobile: localStorage.getItem('userMobile')
+                });
+                
+                // Update local session
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userAvatarUrl', avatar);
+                localStorage.setItem('userState', state);
+                localStorage.setItem('userDistrict', dist);
+                localStorage.setItem('userAddress', addr);
+
+                alert("Changes Saved!");
+                goDashboard();
+            } catch(e) { alert("Error: " + e.message); }
+            
+            document.getElementById('updateBtn').style.display = 'block';
+            document.getElementById('loaderUI').style.display = 'none';
+        }
+
+        window.goDashboard = () => {
+            const r = localStorage.getItem('userRole') || 'contractor';
+            window.location.href = (r === 'labour') ? 'labour.html' : 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

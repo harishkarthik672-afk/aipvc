@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Notifications</title>
+    <!-- Auth Guard -->
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background-color: white;">
+    <div class="app-container" style="padding-bottom: 0; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="header-with-back">
+            <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <h1 class="page-title">Notifications</h1>
+        </header>
+
+        <!-- Notifications List -->
+        <div class="notifications-list">
+            
+            <div class="notification-item">
+                <div class="notification-icon icon-blue">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>New Connection Request</h4>
+                    <p>Murali from Salem Hardware wants to connect with your B2B profile.</p>
+                    <span class="notification-time">2 hours ago</span>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon icon-green">
+                    <i class="fa-solid fa-file-contract"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Contract Updated</h4>
+                    <p>The PVC materials supply contract for Project Alpha has been updated.</p>
+                    <span class="notification-time">5 hours ago</span>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon icon-yellow">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>New Review</h4>
+                    <p>You received a 5-star rating for your recent plumbing job in Coimbatore.</p>
+                    <span class="notification-time">1 day ago</span>
+                </div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-icon icon-red">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Payment Received</h4>
+                    <p>Rs. 15,000 has been credited to your AI PVC Wallet.</p>
+                    <span class="notification-time">2 days ago</span>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon" style="background: var(--text-dark);">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Profile Verified</h4>
+                    <p>Congratulations! Your Contractor KYC documents have been digitally verified.</p>
+                    <span class="notification-time">3 days ago</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

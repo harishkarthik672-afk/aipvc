@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PVC - Dashboard</title>
+    
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') { window.location.replace('login.html'); }
+    </script>
+    
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { margin: 0; padding: 0; background-color: #f7f9fc; min-height: 100vh; font-family: 'Outfit', sans-serif; }
+        .content-section { display: none; padding-bottom: 120px; }
+        .content-section.active { display: block; }
+
+        /* Grid UI */
+        .home-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 10px; padding: 25px 15px; background: white; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .grid-item { text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .icon-circle { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background-color: white !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; }
+        .item-label { font-size: 0.72rem; font-weight: 700; color: #555; line-height: 1.1; }
+        .color-yellow { color: #ffd60a; } .color-green { color: #34c759; } .color-blue { color: #007aff; } .color-red { color: #ff3b30; } .color-purple { color: #af52de; }
+
+        /* Neat Post Form Style */
+        .post-form { background: white; margin: 15px; padding: 20px; border-radius: 20px; border: 1px solid #f0f0f0; }
+        .post-form h3 { margin-top: 0; font-size: 1.1rem; color: var(--primary); font-weight: 700; margin-bottom: 15px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.75rem; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-input { width: 100%; padding: 12px 15px; border: 1.5px solid #f0f0f0; border-radius: 10px; font-family: 'Outfit'; font-size: 0.9rem; box-sizing: border-box; outline: none; background: #fafafa; }
+        .form-input:focus { border-color: var(--primary); background: #fff; }
+
+        /* Stylish & Compact Image Picker */
+        .work-img-picker { width: 100%; height: 130px; background: #fff; border-radius: 12px; border: 1.5px dashed #eee; display: flex; align-items: center; justify-content: center; color: #888; overflow: hidden; position: relative; cursor: pointer; transition: 0.3s; }
+        .work-img-picker:hover { border-color: var(--primary); background: #fff5f5; }
+        .work-img-picker img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        .picker-text { font-size: 0.75rem; font-weight: 600; text-align: center; }
+        .picker-text i { font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
+
+        /* Post Card UI - Fixed Aspect Ratio */
+        .post-card { background: white; margin: 15px; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; margin-bottom: 25px; }
+        .post-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: center; background: #eee; }
+        .post-card-body { padding: 15px; }
+        .post-card-body h4 { margin: 0; font-size: 1.2rem; color: #333; }
+        .post-card-body p { margin: 5px 0; color: #777; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="top-header">
+            <div class="brand-text">AI <span>PVC</span></div>
+            <div class="header-icons">
+                <div class="bell-icon-wrapper" onclick="switchSection('news', document.querySelectorAll('.nav-item')[3])" style="cursor:pointer">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <img src="https://ui-avatars.com/api/?name=User" class="profile-avatar" id="globalAvatar" style="cursor:pointer" onclick="switchSection('more', document.querySelectorAll('.nav-item')[4])">
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="search-container" id="globalSearch">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search PVC network near me">
+            </div>
+        </div>
+
+        <!-- SECTION: HOME -->
+        <div id="section-home" class="content-section active">
+            <div class="home-grid">
+                <!-- Functional Links Restored -->
+                <a href="service_dashboard.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-chart-pie color-yellow"></i></div><div class="item-label">Dashboard</div></a>
+                <a href="payments.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-credit-card color-green"></i></div><div class="item-label">Payment</div></a>
+                <a href="labours.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-users-gear color-blue"></i></div><div class="item-label">Labours</div></a>
+                <a href="materials.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-box-open color-red"></i></div><div class="item-label">Materials</div></a>
+                <a href="machinery.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-gears color-purple"></i></div><div class="item-label">Machinery</div></a>
+                <a href="hardware.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-hammer color-red"></i></div><div class="item-label">Hardware</div></a>
+                <a href="plumbing.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-faucet-drip color-red"></i></div><div class="item-label">Plumbing</div></a>
+                <a href="electricals.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-plug color-green"></i></div><div class="item-label">Electricals</div></a>
+                <a href="packers.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-box color-red"></i></div><div class="item-label">Packers & Movers</div></a>
+                <a href="repairs.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-toolbox color-red"></i></div><div class="item-label">Repairs & Services</div></a>
+                <a href="rent.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-handshake color-red"></i></div><div class="item-label">Rent or Hire</div></a>
+                <a href="jobs.html" class="grid-item"><div class="icon-circle"><i class="fa-solid fa-user-tie color-red"></i></div><div class="item-label">Jobs</div></a>
+            </div>
+            
+            <!-- LABOUR CARDS INTEGRATION -->
+            <!-- Custom Banner Image -->
+            <div style="margin: 20px 15px;">
+                <img src="card1.jpeg" style="width: 100%; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: block;">
+            </div>
+
+            <!-- Info Blocks Row -->
+            <div style="display: flex; gap: 15px; padding: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
+                <div style="min-width: 140px; background: #27ae60; padding: 20px; border-radius: 15px; color: white;">
+                    <i class="fa-solid fa-user-shield" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                    <div style="font-weight: 700; font-size: 0.9rem;">Verified<br>Safety</div>
+                </div>
+                <div style="min-width: 140px; background: #f39c12; padding: 20px; border-radius: 15px; color: white;">
+                    <i class="fa-solid fa-award" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                    <div style="font-weight: 700; font-size: 0.9rem;">Top<br>Rated</div>
+                </div>
+                <div style="min-width: 140px; background: #e74c3c; padding: 20px; border-radius: 15px; color: white;">
+                    <i class="fa-solid fa-rocket" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                    <div style="font-weight: 700; font-size: 0.9rem;">Quick<br>Growth</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POST (SYNCED FORM) -->
+        <div id="section-post" class="content-section">
+            <div class="post-form">
+                <h3>Post New Work</h3>
+                
+                <div class="form-group">
+                    <label>Work Title</label>
+                    <input type="text" id="postWorkName" class="form-input" placeholder="e.g. PVC False Ceiling">
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label>State</label>
+                        <select class="form-input" style="padding: 10px-12px;"><option>Tamil Nadu</option></select>
+                    </div>
+                    <div>
+                        <label>District</label>
+                        <select id="postDistrict" class="form-input" style="padding: 10px-12px;">
+                            <option value="Ariyalur">Ariyalur</option>
+                            <option value="Chengalpattu">Chengalpattu</option>
+                            <option value="Chennai" selected>Chennai</option>
+                            <option value="Coimbatore">Coimbatore</option>
+                            <option value="Cuddalore">Cuddalore</option>
+                            <option value="Dharmapuri">Dharmapuri</option>
+                            <option value="Dindigul">Dindigul</option>
+                            <option value="Erode">Erode</option>
+                            <option value="Kallakurichi">Kallakurichi</option>
+                            <option value="Kanchipuram">Kanchipuram</option>
+                            <option value="Kanyakumari">Kanyakumari</option>
+                            <option value="Karur">Karur</option>
+                            <option value="Krishnagiri">Krishnagiri</option>
+                            <option value="Madurai">Madurai</option>
+                            <option value="Mayiladuthurai">Mayiladuthurai</option>
+                            <option value="Nagapattinam">Nagapattinam</option>
+                            <option value="Namakkal">Namakkal</option>
+                            <option value="Nilgiris">Nilgiris</option>
+                            <option value="Perambalur">Perambalur</option>
+                            <option value="Pudukkottai">Pudukkottai</option>
+                            <option value="Ramanathapuram">Ramanathapuram</option>
+                            <option value="Ranipet">Ranipet</option>
+                            <option value="Salem">Salem</option>
+                            <option value="Sivaganga">Sivaganga</option>
+                            <option value="Tenkasi">Tenkasi</option>
+                            <option value="Thanjavur">Thanjavur</option>
+                            <option value="Theni">Theni</option>
+                            <option value="Thoothukudi">Thoothukudi</option>
+                            <option value="Tiruchirappalli">Tiruchirappalli</option>
+                            <option value="Tirunelveli">Tirunelveli</option>
+                            <option value="Tirupathur">Tirupathur</option>
+                            <option value="Tiruppur">Tiruppur</option>
+                            <option value="Tiruvallur">Tiruvallur</option>
+                            <option value="Tiruvannamalai">Tiruvannamalai</option>
+                            <option value="Tiruvarur">Tiruvarur</option>
+                            <option value="Vellore">Vellore</option>
+                            <option value="Viluppuram">Viluppuram</option>
+                            <option value="Virudhunagar">Virudhunagar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <input type="text" id="postAddress" class="form-input" placeholder="Street/Area name">
+                </div>
+
+                <div class="form-group">
+                    <label>Work Site Photo</label>
+                    <div class="work-img-picker" onclick="document.getElementById('siteImgInp').click()">
+                        <img id="sitePreview" style="display:none">
+                        <div id="imgPlaceholder" class="picker-text">
+                            <i class="fa-solid fa-camera-retro"></i><br>TAP TO UPLOAD
+                        </div>
+                    </div>
+                    <input type="file" id="siteImgInp" accept="image/*" style="display:none">
+                </div>
+
+                <button class="btn-primary" style="width:100%; padding:14px; border-radius:12px; font-size:0.95rem; font-weight:700; margin-top:5px;" onclick="submitPost()" id="submitBtn">Publish Post</button>
+                <div id="publishLoader" style="display:none; text-align:center; padding-top:10px; color:var(--primary); font-size:0.8rem;">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Processing...
+                </div>
+            </div>
+        </div>
+
+        <!-- MY POSTS -->
+        <div id="section-mypost" class="content-section">
+            <div style="padding: 15px;" id="myPostsContainer">
+                <div style="padding: 50px; text-align: center; color: #aaa;">Loading your posts...</div>
+            </div>
+        </div>
+
+        <!-- NEWS (BOOKING NOTIFICATIONS) -->
+        <div id="section-news" class="content-section">
+            <div style="padding: 15px;">
+                <h3 style="margin-top:0; color:var(--primary);">Booking Requests</h3>
+                <div id="bookingRequestsFeed">
+                    <div style="padding: 50px; text-align: center; color: #aaa;">No requests yet.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: MORE (PREMIUM UI) -->
+        <div id="section-more" class="content-section" style="padding-top: 10px;">
+            <div class="more-profile-card" onclick="window.location.href='edit_profile.html'" style="display: flex; align-items: center; gap: 15px; padding: 20px; background: white; margin: 15px; border-radius: 20px; border: 1px solid #f0f0f0; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <img src="https://ui-avatars.com/api/?name=User" id="moreProfileAvatar" style="width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover;">
+                <div class="more-profile-info">
+                    <h3 id="profileNameDisplay" style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #111;">Your Name</h3>
+                    <p style="margin: 3px 0 0; color: #888; font-size: 0.85rem; font-weight: 500;">View and edit details</p>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="margin-left: auto; color: #ddd; font-size: 0.9rem;"></i>
+            </div>
+            <div style="background: white; margin: 15px; border-radius: 20px; border: 1px solid #f0f0f0; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                <a href="#" class="menu-item-row" style="display: flex; align-items: center; gap: 15px; padding: 18px 20px; border-bottom: 1px solid #f9f9f9; color: #333; text-decoration: none; font-weight: 600;"><i class="fa-solid fa-briefcase" style="color: var(--primary); width: 25px;"></i> My Business Listing</a>
+                <a href="javascript:void(0)" onclick="handleLogout()" style="display: flex; align-items: center; gap: 15px; padding: 18px 20px; color: var(--primary); text-decoration: none; font-weight: 600;"><i class="fa-solid fa-power-off" style="width: 25px;"></i> Log Out</a>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <a href="javascript:void(0)" class="nav-item active" onclick="switchSection('home', this)"><i class="fa-solid fa-house"></i><span>Home</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('post', this)"><i class="fa-solid fa-pen-to-square"></i><span>Post</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('mypost', this)"><i class="fa-solid fa-images"></i><span>My Post</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('news', this)"><div class="nav-badge-wrapper"><i class="fa-solid fa-newspaper"></i></div><span>News</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="switchSection('more', this)"><i class="fa-solid fa-bars"></i><span>More</span></a>
+        </nav>
+    </div>
+
+    <!-- Firebase System -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB7tt8p6hUZhrGvW58jSFhYFnB--7cI4Dg", authDomain: "ai-pvc.firebaseapp.com", projectId: "ai-pvc", storageBucket: "ai-pvc.firebasestorage.app", messagingSenderId: "674939624886", appId: "1:674939624886:web:7fa074e73af3449929f517" };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const uid = localStorage.getItem('userUid');
+        const userDistrict = localStorage.getItem('userDistrict') || 'Chennai';
+
+        // Nav Logic
+        window.switchSection = (id, el) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${id}`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(el) el.classList.add('active');
+            if(id === 'mypost') loadMyPosts();
+            if(id === 'news') loadBookingRequests();
+            window.scrollTo(0,0);
+        };
+
+        // Submit Post
+        window.submitPost = async () => {
+            const name = document.getElementById('postWorkName').value;
+            const addr = document.getElementById('postAddress').value;
+            const dist = document.getElementById('postDistrict').value;
+            const img = document.getElementById('sitePreview').src;
+
+            if(!name || !addr || !img) return alert("Please fill all details!");
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('publishLoader').style.display = 'block';
+
+            try {
+                const newPostRef = push(ref(db, 'posts'));
+                await set(newPostRef, {
+                    postId: newPostRef.key,
+                    contractorUid: uid,
+                    workName: name,
+                    address: addr,
+                    district: dist,
+                    workImage: img,
+                    contractorName: localStorage.getItem('userName') || 'Contractor',
+                    status: 'available',
+                    createdAt: Date.now()
+                });
+                alert("Published Successfully!");
+                switchSection('mypost', document.querySelectorAll('.nav-item')[2]);
+                document.getElementById('postWorkName').value = '';
+                document.getElementById('postAddress').value = '';
+                document.getElementById('sitePreview').style.display = 'none';
+                document.getElementById('imgPlaceholder').style.display = 'block';
+            } catch(e) { console.error(e); }
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('publishLoader').style.display = 'none';
+        };
+
+        // Load Booking Requests (Contractor View)
+        function loadBookingRequests() {
+            const feed = document.getElementById('bookingRequestsFeed');
+            onValue(ref(db, 'bookings'), (snap) => {
+                feed.innerHTML = '';
+                let hasReq = false;
+                snap.forEach(child => {
+                    const b = child.val();
+                    if(b.contractorUid === uid && b.status === 'pending') {
+                        hasReq = true;
+                        const card = document.createElement('div');
+                        card.style = "background:white; margin-bottom:15px; padding:15px; border-radius:15px; border:1px solid #eee;";
+                        card.innerHTML = `
+                            <div style="font-weight:700;">${b.labourName} wants to work on:</div>
+                            <div style="color:var(--primary); font-weight:800; margin:5px 0;">${b.workName}</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#27ae60; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Accept</button>
+                                <button onclick="handleBooking('${child.key}', 'rejected')" style="flex:1; background:#e74c3c; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Reject</button>
+                            </div>
+                        `;
+                        feed.appendChild(card);
+                    }
+                });
+                if(!hasReq) feed.innerHTML = '<div style="padding:50px; text-align:center; color:#aaa;">No current requests.</div>';
+            });
+        }
+
+        window.handleBooking = (bid, status) => {
+            onValue(ref(db, `bookings/${bid}`), (snap) => {
+                const b = snap.val();
+                if(b) {
+                    set(ref(db, `bookings/${bid}/status`), status);
+                    // If rejected, make the post available again for others
+                    if(status === 'rejected') {
+                        set(ref(db, `posts/${b.postId}/status`), 'available');
+                    }
+                    alert("Booking Update Sent!");
+                }
+            }, { onlyOnce: true });
+        };
+
+        // Load My Posts
+        function loadMyPosts() {
+            const container = document.getElementById('myPostsContainer');
+            onValue(ref(db, 'posts'), (snap) => {
+                container.innerHTML = '<h3 style="margin-top:0;">My Posts & Status</h3>';
+                let hasPosts = false;
+                snap.forEach(child => {
+                    const d = child.val();
+                    if(d.contractorUid === uid) {
+                        hasPosts = true;
+                        // Check for finished status in bookings
+                        onValue(ref(db, 'bookings'), (bSnap) => {
+                            let finishImg = "";
+                            let bStatus = "Available";
+                            bSnap.forEach(bc => {
+                                const bv = bc.val();
+                                if(bv.postId === d.postId) {
+                                    bStatus = bv.status.toUpperCase();
+                                    if(bv.status === 'finished') finishImg = bv.finishImage;
+                                }
+                            });
+
+                            const card = document.createElement('div');
+                            card.className = 'post-card';
+                            card.innerHTML = `
+                                <img src="${d.workImage}">
+                                <div class="post-card-body">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <h4>${d.workName}</h4>
+                                        <span style="background:${bStatus==='FINISHED'?'#27ae60':'#007aff'}; color:white; padding:4px 10px; border-radius:30px; font-size:0.65rem; font-weight:800;">${bStatus}</span>
+                                    </div>
+                                    <p><i class="fa-solid fa-location-dot"></i> ${d.district}</p>
+                                    ${finishImg ? `<div style="margin-top:10px;"><label style="font-size:0.7rem; font-weight:800; color:#27ae60;">WORK FINISHED PHOTO:</label><img src="${finishImg}" style="width:100%; height:150px; border-radius:10px; margin-top:5px;"></div>` : ''}
+                                </div>
+                            `;
+                            container.appendChild(card);
+                        }, { onlyOnce: true });
+                    }
+                });
+            });
+        }
+
+        // Init
+        const av = localStorage.getItem('userAvatarUrl');
+        if(av) { document.getElementById('globalAvatar').src = av; document.getElementById('moreProfileAvatar').src = av; }
+        const nm = localStorage.getItem('userName');
+        if(nm) document.getElementById('profileNameDisplay').innerText = nm;
+
+        window.handleLogout = () => { if(confirm('Logout?')) { localStorage.removeItem('isLoggedIn'); window.location.replace('login.html'); } };
+    </script>
+</body>
+</html>
