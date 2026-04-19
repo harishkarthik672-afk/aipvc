@@ -203,6 +203,8 @@
 
         window.switchSection('home');
         if(localStorage.getItem('userAvatarUrl')) document.getElementById('globalAvatar').src = localStorage.getItem('userAvatarUrl');
+        if(localStorage.getItem('userAvatarUrl')) document.getElementById('moreProfileAvatar').src = localStorage.getItem('userAvatarUrl');
+        if(localStorage.getItem('userName')) document.getElementById('labourNameDisplay').innerText = localStorage.getItem('userName');
     </script>
 </body>
 </html>
