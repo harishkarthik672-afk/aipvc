@@ -392,12 +392,8 @@
                     } else if (user.displayName) {
                         localStorage.setItem('userAvatarUrl', `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=4285f4&color=fff`);
                     }
-                    const selectedRole = document.querySelector('input[name="role"]:checked').value;
-                    if (selectedRole === 'contractor') {
-                        window.location.href = "dashboard.html";
-                    } else {
-                        window.location.href = "labour.html";
-                    }
+                    // Force profile setup after Google login
+                    window.location.href = "edit_profile.html";
                 } catch (error) {
                     console.error("Authentication Error:", error.code, error.message);
                     alert("Google Login Failed: " + error.message);

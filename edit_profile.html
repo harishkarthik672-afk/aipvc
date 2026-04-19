@@ -3,83 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Your Profile - Edit Info</title>
+    <title>AI PVC - Complete Profile</title>
     
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { background: #fff !important; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
-        .app-header { position: fixed; top: 0; width: 100%; height: 70px; background: white; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; border-bottom: 1px solid #f0f0f0; z-index: 1000; justify-content: space-between; }
-        .back-btn { font-size: 1.5rem; color: #333; cursor: pointer; }
-        .page-title { font-weight: 800; font-size: 1.3rem; color: var(--primary); }
+        body { background: #fdfdfd !important; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        .app-header { position: sticky; top: 0; width: 100%; height: 70px; background: white; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; border-bottom: 1px solid #f0f0f0; z-index: 1000; justify-content: space-between; }
+        .back-btn { font-size: 1.3rem; color: #333; cursor: pointer; }
+        .page-title { font-weight: 800; font-size: 1.2rem; color: #111; letter-spacing: -0.5px; }
+        .page-title span { color: var(--primary); }
         
-        .main-content { padding-top: 90px; padding-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
+        .main-content { padding: 30px 20px 100px; display: flex; flex-direction: column; align-items: center; max-width: 500px; margin: 0 auto; }
         
-        /* Profile Image Edit Section */
-        .avatar-edit-container { position: relative; margin-bottom: 30px; }
-        .avatar-wrapper img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; object-position: center; border: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .edit-icon-label { position: absolute; bottom: 5px; right: 5px; background: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 3px solid #fff; cursor: pointer; box-shadow: 0 5px 10px rgba(234, 67, 53, 0.3); }
+        /* Profile Image Container */
+        .avatar-edit-container { position: relative; margin-bottom: 40px; }
+        .avatar-wrapper { width: 130px; height: 130px; border-radius: 50%; padding: 5px; background: linear-gradient(135deg, var(--primary), #ff8a80); box-shadow: 0 15px 35px rgba(234, 67, 53, 0.2); }
+        .avatar-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid white; box-sizing: border-box; }
+        .edit-icon-label { position: absolute; bottom: 5px; right: 5px; background: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); box-shadow: 0 8px 15px rgba(0,0,0,0.1); cursor: pointer; border: 1px solid #eee; }
 
         /* Form Styling */
-        .profile-form { width: 100%; padding: 0 30px; box-sizing: border-box; }
+        .profile-form { width: 100%; }
         .input-box { margin-bottom: 25px; }
-        .input-box label { display: block; font-weight: 700; font-size: 0.85rem; color: #aaa; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.8px; }
-        .input-box input, .input-box textarea, .input-box select { width: 100%; background: #f8f9fa; border: 2px solid #f1f1f1; border-radius: 15px; padding: 18px; font-family: 'Outfit'; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-box input:focus, .input-box textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 5px 20px rgba(234, 67, 53, 0.05); }
+        .input-box label { display: block; font-weight: 800; font-size: 0.75rem; color: #999; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; padding-left: 5px; }
+        .input-box input, .input-box textarea, .input-box select { width: 100%; background: #fff; border: 1.5px solid #eee; border-radius: 18px; padding: 18px; font-family: 'Outfit'; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; color: #333; }
+        .input-box input:focus, .input-box select:focus, .input-box textarea:focus { border-color: var(--primary); box-shadow: 0 10px 25px rgba(234, 67, 53, 0.08); background: #fff; }
 
-        .save-button { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 20px; font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 10px 30px rgba(234, 67, 53, 0.3); margin-top: 15px; }
-        .save-button:active { transform: scale(0.98); }
+        .save-button { width: 100%; background: var(--primary); color: white; border: none; padding: 22px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 15px 40px rgba(234, 67, 53, 0.35); transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .save-button:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
 
     <header class="app-header">
-        <i class="fa-solid fa-arrow-left back-btn" onclick="goDashboard()"></i>
-        <div class="page-title">Edit <span>Profile</span></div>
-        <i class="fa-solid fa-check" style="font-size: 1.4rem; color: var(--primary); cursor: pointer;" onclick="saveChanges()"></i>
+        <i class="fa-solid fa-arrow-left back-btn" onclick="window.history.back()"></i>
+        <div class="page-title">Profile <span>Setup</span></div>
+        <div style="width: 20px;"></div>
     </header>
 
     <div class="main-content">
-        <!-- Image Section -->
+        <!-- Profile Image -->
         <div class="avatar-edit-container">
-            <img src="https://ui-avatars.com/api/?name=User" id="profImg">
+            <div class="avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=User&background=4285f4&color=fff" id="profImg">
+            </div>
             <label for="imgLoader" class="edit-icon-label"><i class="fa-solid fa-camera"></i></label>
             <input type="file" id="imgLoader" accept="image/*" style="display: none;">
         </div>
 
-        <!-- Form Section -->
+        <!-- Form -->
         <div class="profile-form">
             <div class="input-box">
-                <label>Update Your Full Name</label>
-                <input type="text" id="nameText" placeholder="Enter your business/full name">
+                <label>Full Name</label>
+                <input type="text" id="nameText" placeholder="Your name or business name">
             </div>
 
             <div class="input-box">
-                <label>Select State</label>
-                <select id="stateSelect">
-                    <option value="tamilnadu">Tamil Nadu</option>
-                    <option value="kerala">Kerala</option>
-                    <option value="karnataka">Karnataka</option>
-                    <option value="andhra">Andhra Pradesh</option>
-                    <option value="telangana">Telangana</option>
+                <label>District</label>
+                <select id="distSelect">
+                    <option value="" disabled selected>Select your district</option>
+                    <option value="Ariyalur">Ariyalur</option>
+                    <option value="Chengalpattu">Chengalpattu</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Coimbatore">Coimbatore</option>
+                    <option value="Cuddalore">Cuddalore</option>
+                    <option value="Dharmapuri">Dharmapuri</option>
+                    <option value="Dindigul">Dindigul</option>
+                    <option value="Erode">Erode</option>
+                    <option value="Kallakurichi">Kallakurichi</option>
+                    <option value="Kanchipuram">Kanchipuram</option>
+                    <option value="Kanyakumari">Kanyakumari</option>
+                    <option value="Karur">Karur</option>
+                    <option value="Krishnagiri">Krishnagiri</option>
+                    <option value="Madurai">Madurai</option>
+                    <option value="Mayiladuthurai">Mayiladuthurai</option>
+                    <option value="Nagapattinam">Nagapattinam</option>
+                    <option value="Namakkal">Namakkal</option>
+                    <option value="Nilgiris">Nilgiris</option>
+                    <option value="Perambalur">Perambalur</option>
+                    <option value="Pudukkottai">Pudukkottai</option>
+                    <option value="Ramanathapuram">Ramanathapuram</option>
+                    <option value="Ranipet">Ranipet</option>
+                    <option value="Salem">Salem</option>
+                    <option value="Sivaganga">Sivaganga</option>
+                    <option value="Tenkasi">Tenkasi</option>
+                    <option value="Thanjavur">Thanjavur</option>
+                    <option value="Theni">Theni</option>
+                    <option value="Thoothukudi">Thoothukudi</option>
+                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                    <option value="Tirunelveli">Tirunelveli</option>
+                    <option value="Tirupathur">Tirupathur</option>
+                    <option value="Tiruppur">Tiruppur</option>
+                    <option value="Tiruvallur">Tiruvallur</option>
+                    <option value="Tiruvannamalai">Tiruvannamalai</option>
+                    <option value="Tiruvarur">Tiruvarur</option>
+                    <option value="Vellore">Vellore</option>
+                    <option value="Viluppuram">Viluppuram</option>
+                    <option value="Virudhunagar">Virudhunagar</option>
                 </select>
             </div>
 
             <div class="input-box">
-                <label>District Info</label>
-                <input type="text" id="distText" placeholder="Enter your district name">
+                <label>Mobile Number</label>
+                <input type="tel" id="mobileText" placeholder="10-digit mobile number">
             </div>
 
             <div class="input-box">
-                <label>Current Address</label>
-                <textarea id="addrText" style="height: 100px; resize: none;" placeholder="Full office/site address"></textarea>
+                <label>Office Address</label>
+                <textarea id="addrText" style="height: 100px; resize: none;" placeholder="Your street and city details"></textarea>
             </div>
 
-            <button class="save-button" onclick="saveChanges()" id="updateBtn">Save & Update Profile</button>
-            <div id="loaderUI" style="display: none; text-align: center; color: var(--primary); padding-top: 20px; font-weight: 700;">
-                <i class="fa-solid fa-spinner fa-spin"></i> Syncing...
+            <button class="save-button" onclick="saveChanges()" id="updateBtn">
+                Save & Continue <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <div id="loaderUI" style="display: none; text-align: center; color: var(--primary); padding-top: 20px; font-weight: 800;">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> SYNCING...
             </div>
         </div>
     </div>
@@ -95,31 +135,31 @@
 
         const uid = localStorage.getItem('userUid');
 
-        // Load existing one
         window.onload = async () => {
-            const n = localStorage.getItem('userName');
-            if(n) { document.getElementById('nameText').value = n; }
-            document.getElementById('stateSelect').value = localStorage.getItem('userState') || 'tamilnadu';
-            document.getElementById('distText').value = localStorage.getItem('userDistrict') || '';
+            // Load from LocalStorage
+            document.getElementById('nameText').value = localStorage.getItem('userName') || '';
+            document.getElementById('distSelect').value = localStorage.getItem('userDistrict') || '';
+            document.getElementById('mobileText').value = localStorage.getItem('userMobile') || '';
             document.getElementById('addrText').value = localStorage.getItem('userAddress') || '';
-            const p = localStorage.getItem('userAvatarUrl');
-            if(p) document.getElementById('profImg').src = p;
+            if(localStorage.getItem('userAvatarUrl')) document.getElementById('profImg').src = localStorage.getItem('userAvatarUrl');
 
-            // Sync from Database for safety
-            try {
-                const snapshot = await get(child(ref(db), `users/${uid}`));
-                if(snapshot.exists()) {
-                    const d = snapshot.val();
-                    document.getElementById('nameText').value = d.name || '';
-                    document.getElementById('stateSelect').value = d.state || 'tamilnadu';
-                    document.getElementById('distText').value = d.district || '';
-                    document.getElementById('addrText').value = d.address || '';
-                    if(d.avatar) document.getElementById('profImg').src = d.avatar;
-                }
-            } catch(e) {}
+            // Load from Database
+            if(uid) {
+                try {
+                    const snapshot = await get(child(ref(db), `users/${uid}`));
+                    if(snapshot.exists()) {
+                        const d = snapshot.val();
+                        document.getElementById('nameText').value = d.name || document.getElementById('nameText').value;
+                        document.getElementById('distSelect').value = d.district || document.getElementById('distSelect').value;
+                        document.getElementById('mobileText').value = d.mobile || document.getElementById('mobileText').value;
+                        document.getElementById('addrText').value = d.address || document.getElementById('addrText').value;
+                        if(d.avatar) document.getElementById('profImg').src = d.avatar;
+                    }
+                } catch(e) {}
+            }
         }
 
-        // Photo pick
+        // Image Handling
         document.getElementById('imgLoader').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if(file) {
@@ -129,44 +169,42 @@
             }
         });
 
-        // Save functionality
+        // Save
         window.saveChanges = async () => {
             const name = document.getElementById('nameText').value;
-            const state = document.getElementById('stateSelect').value;
-            const dist = document.getElementById('distText').value;
+            const dist = document.getElementById('distSelect').value;
+            const mobile = document.getElementById('mobileText').value;
             const addr = document.getElementById('addrText').value;
             const avatar = document.getElementById('profImg').src;
 
-            if(!name) return alert("Full Name Required!");
+            if(!name || !dist || !mobile) return alert("Please fill Name, District and Mobile!");
 
             document.getElementById('updateBtn').style.display = 'none';
             document.getElementById('loaderUI').style.display = 'block';
 
             try {
                 const role = localStorage.getItem('userRole') || 'contractor';
-                await set(ref(db, `users/${uid}`), {
-                    name, state, district: dist, address: addr, avatar,
-                    role, mobile: localStorage.getItem('userMobile')
+                const finalUid = uid || 'user_' + Math.random().toString(36).substr(2, 9);
+                if(!uid) localStorage.setItem('userUid', finalUid);
+
+                await set(ref(db, `users/${finalUid}`), {
+                    name, district: dist, mobile, address: addr, avatar, role
                 });
                 
-                // Update local session
+                // Keep Session
                 localStorage.setItem('userName', name);
                 localStorage.setItem('userAvatarUrl', avatar);
-                localStorage.setItem('userState', state);
                 localStorage.setItem('userDistrict', dist);
+                localStorage.setItem('userMobile', mobile);
                 localStorage.setItem('userAddress', addr);
+                localStorage.setItem('isLoggedIn', 'true');
 
-                alert("Changes Saved!");
-                goDashboard();
-            } catch(e) { alert("Error: " + e.message); }
-            
-            document.getElementById('updateBtn').style.display = 'block';
-            document.getElementById('loaderUI').style.display = 'none';
-        }
-
-        window.goDashboard = () => {
-            const r = localStorage.getItem('userRole') || 'contractor';
-            window.location.href = (r === 'labour') ? 'labour.html' : 'dashboard.html';
+                window.location.href = (role === 'labour') ? 'labour.html' : 'dashboard.html';
+            } catch(e) { 
+                alert("Error: " + e.message); 
+                document.getElementById('updateBtn').style.display = 'block';
+                document.getElementById('loaderUI').style.display = 'none';
+            }
         }
     </script>
 </body>
