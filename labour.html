@@ -200,28 +200,56 @@
 
         window.previewFinishImage = (input, bid) => {
             const file = input.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const img = document.getElementById('img_' + bid);
-                    const txt = document.getElementById('text_' + bid);
-                    const btn = document.getElementById('btn_' + bid);
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    txt.style.display = 'none';
-                    btn.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+            if (file) {
+                const img = document.getElementById('img_' + bid);
+                const txt = document.getElementById('text_' + bid);
+                const btn = document.getElementById('btn_' + bid);
+                
+                // Clear any previous error states
+                img.onerror = null;
+                
+                // Fast preview using object URL
+                const url = URL.createObjectURL(file);
+                img.src = url;
+                img.style.display = 'block';
+                txt.style.display = 'none';
+                btn.style.display = 'block';
+                
+                // Clean up memory after image loads
+                img.onload = () => URL.revokeObjectURL(url);
             }
         };
 
         window.submitFinishRequest = async (bid) => {
-            const img = document.getElementById('img_' + bid).src;
-            if(!img) return alert("Select a photo first!");
+            const imgEl = document.getElementById('img_' + bid);
+            const input = document.getElementById('input_' + bid);
+            const file = input.files[0];
+            
+            if(!file) return alert("Please select a photo first!");
+            
+            // Show loading state on button
+            const btn = document.getElementById('btn_' + bid);
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
+            btn.disabled = true;
+
             try {
-                await update(ref(db, `bookings/${bid}`), { status: 'awaiting_approval', finishImage: img });
-                alert("Finish Request Sent! Waiting for Contractor to approve.");
-            } catch(e) { alert(e.message); }
+                // Convert to Base64 for database storage
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    await update(ref(db, `bookings/${bid}`), { 
+                        status: 'awaiting_approval', 
+                        finishImage: e.target.result 
+                    });
+                    alert("Finish Request Sent! Waiting for Contractor to approve.");
+                    btn.disabled = false;
+                    btn.innerText = 'SEND FINISH REQUEST';
+                };
+                reader.readAsDataURL(file);
+            } catch(e) { 
+                alert(e.message); 
+                btn.disabled = false;
+                btn.innerText = 'SEND FINISH REQUEST';
+            }
         };
 
         window.switchSection('home');
