@@ -249,6 +249,22 @@
         const uid = localStorage.getItem('userUid');
         const userDistrict = localStorage.getItem('userDistrict') || 'Chennai';
 
+        // Image Selection Handler (FIXED)
+        document.getElementById('siteImgInp').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const preview = document.getElementById('sitePreview');
+                    const placeholder = document.getElementById('imgPlaceholder');
+                    preview.src = ev.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         // Nav Logic
         window.switchSection = (id, el) => {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
