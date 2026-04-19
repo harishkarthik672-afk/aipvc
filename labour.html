@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="finish-upload-area" onclick="document.getElementById('input_${child.key}').click()">
                                     <input type="file" id="input_${child.key}" style="display:none;" onchange="previewFinishImage(this, '${child.key}')">
-                                    <img id="img_${child.key}">
+                                    <img id="img_${child.key}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="display:none; border-radius:10px;">
                                     <div id="text_${child.key}"><i class="fa-solid fa-cloud-arrow-up"></i><br><b style="font-size:0.8rem;">FINISH WORK? TAP TO UPLOAD IMAGE</b></div>
                                 </div>
                                 <button id="btn_${child.key}" class="btn-apply" onclick="submitFinishRequest('${child.key}')" style="display:none; background:#2e7d32;">SEND FINISH REQUEST</button>
@@ -205,48 +205,39 @@
                 const txt = document.getElementById('text_' + bid);
                 const btn = document.getElementById('btn_' + bid);
                 
-                // Clear any previous error states
-                img.onerror = null;
-                
-                // Fast preview using object URL
-                const url = URL.createObjectURL(file);
-                img.src = url;
-                img.style.display = 'block';
-                txt.style.display = 'none';
-                btn.style.display = 'block';
-                
-                // Clean up memory after image loads
-                img.onload = () => URL.revokeObjectURL(url);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    img.style.width = '100%';
+                    img.style.height = '150px';
+                    img.style.objectFit = 'cover';
+                    txt.style.display = 'none';
+                    btn.style.display = 'block';
+                };
+                reader.onerror = () => alert("Error reading file. Try another photo.");
+                reader.readAsDataURL(file);
             }
         };
 
         window.submitFinishRequest = async (bid) => {
             const imgEl = document.getElementById('img_' + bid);
-            const input = document.getElementById('input_' + bid);
-            const file = input.files[0];
+            if(!imgEl.src || imgEl.src.includes('data:image/gif')) return alert("Please select a photo first!");
             
-            if(!file) return alert("Please select a photo first!");
-            
-            // Show loading state on button
             const btn = document.getElementById('btn_' + bid);
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
             btn.disabled = true;
 
             try {
-                // Convert to Base64 for database storage
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    await update(ref(db, `bookings/${bid}`), { 
-                        status: 'awaiting_approval', 
-                        finishImage: e.target.result 
-                    });
-                    alert("Finish Request Sent! Waiting for Contractor to approve.");
-                    btn.disabled = false;
-                    btn.innerText = 'SEND FINISH REQUEST';
-                };
-                reader.readAsDataURL(file);
+                await update(ref(db, `bookings/${bid}`), { 
+                    status: 'awaiting_approval', 
+                    finishImage: imgEl.src 
+                });
+                alert("Success! Finish Request Sent to Contractor.");
+                btn.disabled = false;
+                btn.innerText = 'SEND FINISH REQUEST';
             } catch(e) { 
-                alert(e.message); 
+                alert("Upload failed: " + e.message); 
                 btn.disabled = false;
                 btn.innerText = 'SEND FINISH REQUEST';
             }
