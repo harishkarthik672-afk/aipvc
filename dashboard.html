@@ -276,7 +276,7 @@
             window.scrollTo(0,0);
         };
 
-        // Submit Post
+        // Submit Post (FIXED WITH MOBILE)
         window.submitPost = async () => {
             const name = document.getElementById('postWorkName').value;
             const addr = document.getElementById('postAddress').value;
@@ -293,6 +293,7 @@
                 await set(newPostRef, {
                     postId: newPostRef.key,
                     contractorUid: uid,
+                    contractorMobile: localStorage.getItem('userMobile') || '9999999999',
                     workName: name,
                     address: addr,
                     district: dist,
@@ -303,6 +304,7 @@
                 });
                 alert("Published Successfully!");
                 switchSection('mypost', document.querySelectorAll('.nav-item')[2]);
+                // Clear
                 document.getElementById('postWorkName').value = '';
                 document.getElementById('postAddress').value = '';
                 document.getElementById('sitePreview').style.display = 'none';
@@ -312,30 +314,51 @@
             document.getElementById('publishLoader').style.display = 'none';
         };
 
-        // Load Booking Requests (Contractor View)
+        // Load Booking & Finished Feed (MODERN)
         function loadBookingRequests() {
             const feed = document.getElementById('bookingRequestsFeed');
             onValue(ref(db, 'bookings'), (snap) => {
                 feed.innerHTML = '';
-                let hasReq = false;
+                let hasNotif = false;
                 snap.forEach(child => {
                     const b = child.val();
-                    if(b.contractorUid === uid && b.status === 'pending') {
-                        hasReq = true;
+                    if(b.contractorUid === uid) {
                         const card = document.createElement('div');
-                        card.style = "background:white; margin-bottom:15px; padding:15px; border-radius:15px; border:1px solid #eee;";
-                        card.innerHTML = `
-                            <div style="font-weight:700;">${b.labourName} wants to work on:</div>
-                            <div style="color:var(--primary); font-weight:800; margin:5px 0;">${b.workName}</div>
-                            <div style="display:flex; gap:10px; margin-top:10px;">
-                                <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#27ae60; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Accept</button>
-                                <button onclick="handleBooking('${child.key}', 'rejected')" style="flex:1; background:#e74c3c; color:white; border:none; padding:10px; border-radius:8px; font-weight:700;">Reject</button>
-                            </div>
-                        `;
-                        feed.appendChild(card);
+                        card.style = "background:white; margin-bottom:15px; padding:20px; border-radius:18px; border:1px solid #f0f0f0; box-shadow:0 4px 10px rgba(0,0,0,0.02);";
+                        
+                        if(b.status === 'pending') {
+                            hasNotif = true;
+                            card.innerHTML = `
+                                <div style="font-size:0.7rem; font-weight:800; color:var(--primary); margin-bottom:5px;">NEW BOOKING REQUEST</div>
+                                <div style="font-weight:800; font-size:1.1rem; color:#111;">${b.labourName}</div>
+                                <div style="font-size:0.85rem; color:#666; margin:5px 0;">Work: ${b.workName}</div>
+                                <div style="margin:10px 0; background:#f9f9f9; padding:8px 15px; border-radius:30px; display:inline-flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:700;">
+                                    <i class="fa-solid fa-phone" style="color:#27ae60;"></i> ${b.labourMobile}
+                                </div>
+                                <div style="display:flex; gap:10px; margin-top:15px;">
+                                    <button onclick="handleBooking('${child.key}', 'confirmed')" style="flex:1; background:#27ae60; color:white; border:none; padding:12px; border-radius:10px; font-weight:700;">Accept</button>
+                                    <button onclick="handleBooking('${child.key}', 'rejected')" style="flex:1; background:#e74c3c; color:white; border:none; padding:12px; border-radius:10px; font-weight:700;">Reject</button>
+                                </div>
+                            `;
+                        } else if(b.status === 'finished') {
+                            hasNotif = true;
+                            card.innerHTML = `
+                                <div style="font-size:0.75rem; font-weight:800; color:#27ae60; margin-bottom:10px;"><i class="fa-solid fa-circle-check"></i> WORK FINISHED BY ${b.labourName.toUpperCase()}</div>
+                                <div style="font-weight:800; font-size:1.1rem; margin-bottom:10px;">Project: ${b.workName}</div>
+                                <img src="${b.finishImage}" style="width:100%; height:220px; object-fit:cover; border-radius:15px; border:2px solid #e8f5e9;">
+                                <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
+                                    <div style="font-size:0.85rem; font-weight:700; color:#333;"><i class="fa-solid fa-phone" style="color:#27ae60;"></i> ${b.labourMobile}</div>
+                                    <button style="background:var(--primary); color:white; border:none; padding:10px 18px; border-radius:12px; font-weight:800; font-size:0.8rem;" onclick="alert('Verification Successful!')">Approve Job</button>
+                                </div>
+                            `;
+                        } else {
+                            card.innerHTML = '';
+                        }
+                        
+                        if(card.innerHTML) feed.appendChild(card);
                     }
                 });
-                if(!hasReq) feed.innerHTML = '<div style="padding:50px; text-align:center; color:#aaa;">No current requests.</div>';
+                if(!hasNotif) feed.innerHTML = '<div style="padding:50px; text-align:center; color:#aaa;">No new requests or finished jobs.</div>';
             });
         }
 
