@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI PVC - Create Post</title>
-    <script>if(localStorage.getItem('isLoggedIn') !== 'true') window.location.replace('login.html');</script>
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') { 
+            window.location.replace('login.html'); 
+        } else {
+            const expiry = localStorage.getItem('subscriptionExpiry');
+            if (!expiry || parseInt(expiry) < Date.now()) {
+                window.location.replace('login.html');
+            }
+        }
+    </script>
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body style="background-color: var(--bg-light);">
     <div class="app-container">
@@ -184,40 +195,77 @@
             }
         });
 
+        const RAZORPAY_KEY_ID = 'rzp_test_SfkbsakdooIQvc'; // REPLACE WITH YOUR ACTUAL RAZORPAY KEY ID
+
         document.getElementById('publishBtn').addEventListener('click', async () => {
             const workName = document.getElementById('workName').value;
-            const squareFit = document.getElementById('squareFit').value;
+            const squareFitRaw = document.getElementById('squareFit').value;
             const address = document.getElementById('address').value;
             const district = document.getElementById('district').value;
             const avatar = localStorage.getItem('userAvatarUrl') || "https://ui-avatars.com/api/?name=User";
 
-            if(!workName || !squareFit || !address || !district) {
+            // Extract numeric value from squareFit (e.g., "1500 sq ft" -> 1500)
+            const squareFit = parseInt(squareFitRaw.replace(/[^0-9]/g, ''));
+
+            if(!workName || !squareFitRaw || !address || !district) {
                 alert("Please fill in all the details.");
                 return;
             }
 
-            document.getElementById('publishBtn').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
-
-            try {
-                await push(ref(db, "posts"), {
-                    workName: workName,
-                    squareFit: squareFit,
-                    address: address,
-                    district: district,
-                    image: base64Image,
-                    userAvatar: avatar,
-                    createdAt: serverTimestamp()
-                });
-                
-                alert("Post successfully published to server!");
-                window.location.href = "mypost.html";
-            } catch (e) {
-                console.error("Error adding data: ", e);
-                alert("Error connecting to server. Please try again.");
-                document.getElementById('publishBtn').style.display = 'block';
-                document.getElementById('loader').style.display = 'none';
+            if(isNaN(squareFit) || squareFit <= 0) {
+                alert("Please enter a valid square footage (numeric).");
+                return;
             }
+
+            // Calculate Amount: ₹1 per sq ft
+            const amountInRupees = squareFit;
+            const amountInPaise = amountInRupees * 100;
+
+            const options = {
+                "key": RAZORPAY_KEY_ID,
+                "amount": amountInPaise,
+                "currency": "INR",
+                "name": "AI PVC Network",
+                "description": `Posting Fee for ${squareFit} sq ft - ₹${amountInRupees}`,
+                "image": avatar,
+                "handler": async function (response) {
+                    // Payment successful, proceed to save post
+                    document.getElementById('publishBtn').style.display = 'none';
+                    document.getElementById('loader').style.display = 'block';
+
+                    try {
+                        await push(ref(db, "posts"), {
+                            workName: workName,
+                            squareFit: squareFitRaw,
+                            address: address,
+                            district: district,
+                            image: base64Image,
+                            userAvatar: avatar,
+                            paymentId: response.razorpay_payment_id,
+                            paidAmount: amountInRupees,
+                            createdAt: serverTimestamp()
+                        });
+                        
+                        alert("Post successfully published to server!");
+                        window.location.href = "mypost.html";
+                    } catch (e) {
+                        console.error("Error adding data: ", e);
+                        alert("Error connecting to server. Please try again.");
+                        document.getElementById('publishBtn').style.display = 'block';
+                        document.getElementById('loader').style.display = 'none';
+                    }
+                },
+                "prefill": {
+                    "name": localStorage.getItem('userName') || "",
+                    "contact": localStorage.getItem('userMobile') || ""
+                },
+                "theme": {
+                    "color": "#ff0000"
+                }
+            };
+
+            const rzp1 = new Razorpay(options);
+            rzp1.open();
         });
     </script>
 </body>

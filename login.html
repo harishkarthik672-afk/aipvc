@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="login.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
     <div class="container">
@@ -62,6 +64,11 @@
                             <a href="#" class="forgot-password">Forgot password?</a>
                         </div>
 
+                        <div class="input-group" style="margin-top: 15px;">
+                            <label for="promo-code">Promo Code (Optional) :</label>
+                            <input type="text" id="promo-code" placeholder="Enter code for free trial">
+                        </div>
+
                         <!-- Buttons anchored to the bottom -->
                         <div style="margin-top: auto;">
                             <button type="submit" class="btn-primary" onclick="handleManualLogin()">Log In</button>
@@ -102,6 +109,10 @@
                             <div class="input-group">
                                 <label>Password :</label>
                                 <input type="password" placeholder="Create a password">
+                            </div>
+                            <div class="input-group">
+                                <label>Promo Code (Optional) :</label>
+                                <input type="text" class="signup-promo-code" placeholder="Enter code for free trial">
                             </div>
                             <div class="terms-group">
                                 <label class="terms-checkbox">
@@ -247,7 +258,59 @@
         let currentStep = 1;
         const totalSteps = 4;
 
+        const RAZORPAY_KEY_ID = 'rzp_test_SfkbsakdooIQvc';
+        const PROMO_CODE = '81222006';
+
         function handleManualLogin() {
+            // Check for Promo Code
+            const loginPromo = document.getElementById('promo-code')?.value;
+            const signupPromo = document.querySelector('.signup-promo-code')?.value;
+            const enteredCode = loginPromo || signupPromo;
+
+            if (enteredCode === PROMO_CODE) {
+                const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                localStorage.setItem('subscriptionExpiry', (Date.now() + thirtyDaysInMs).toString());
+                localStorage.setItem('lastPaymentId', 'PROMO_CODE_USED');
+                completeLogin();
+                return;
+            }
+
+            // Check if subscription is already active
+            const expiry = localStorage.getItem('subscriptionExpiry');
+            if (expiry && parseInt(expiry) > Date.now()) {
+                completeLogin();
+                return;
+            }
+
+            // If not active, initiate Razorpay for ₹1000
+            const options = {
+                "key": RAZORPAY_KEY_ID,
+                "amount": 100000, // Amount in paise (1000 * 100)
+                "currency": "INR",
+                "name": "AI PVC Network",
+                "description": "Monthly Access Subscription - ₹1000",
+                "image": "https://ui-avatars.com/api/?name=AIPVC&background=ff0000&color=fff",
+                "handler": function (response) {
+                    // Payment successful
+                    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                    localStorage.setItem('subscriptionExpiry', (Date.now() + thirtyDaysInMs).toString());
+                    localStorage.setItem('lastPaymentId', response.razorpay_payment_id);
+                    completeLogin();
+                },
+                "prefill": {
+                    "name": localStorage.getItem('userName') || "",
+                    "email": document.getElementById('login-email')?.value || "",
+                    "contact": document.getElementById('userMobile')?.value || ""
+                },
+                "theme": {
+                    "color": "#ff0000"
+                }
+            };
+            const rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+        function completeLogin() {
             localStorage.setItem('isLoggedIn', 'true');
             const mobile = document.getElementById('userMobile').value;
             const district = document.getElementById('userDistrict').value;
@@ -257,7 +320,7 @@
 
             const selectedRole = document.querySelector('input[name="role"]:checked').value;
             if (selectedRole === 'contractor') {
-                window.location.href = 'contractor.html';
+                window.location.href = 'dashboard.html';
             } else {
                 window.location.href = 'labour.html';
             }
@@ -372,6 +435,9 @@
             measurementId: "G-QQDLCTM6MR"
         };
 
+        const RAZORPAY_KEY_ID = 'rzp_test_SfkbsakdooIQvc';
+        const PROMO_CODE = '81222006';
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
@@ -393,11 +459,63 @@
                         localStorage.setItem('userAvatarUrl', `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=4285f4&color=fff`);
                     }
                     const selectedRole = document.querySelector('input[name="role"]:checked').value;
-                    if (selectedRole === 'contractor') {
-                        window.location.href = "contractor.html";
-                    } else {
-                        window.location.href = "labour.html";
+                    
+                    // Check for Promo Code (First Month Free)
+                    const loginPromo = document.getElementById('promo-code')?.value;
+                    const signupPromo = document.querySelector('.signup-promo-code')?.value;
+                    const enteredCode = loginPromo || signupPromo;
+
+                    if (enteredCode === PROMO_CODE) {
+                        const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                        localStorage.setItem('subscriptionExpiry', (Date.now() + thirtyDaysInMs).toString());
+                        localStorage.setItem('lastPaymentId', 'PROMO_CODE_USED');
+                        if (selectedRole === 'contractor') {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "labour.html";
+                        }
+                        return;
                     }
+
+                    // Check if subscription is already active
+                    const expiry = localStorage.getItem('subscriptionExpiry');
+                    if (expiry && parseInt(expiry) > Date.now()) {
+                        if (selectedRole === 'contractor') {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "labour.html";
+                        }
+                        return;
+                    }
+
+                    // If not active, initiate Razorpay
+                    const options = {
+                        "key": RAZORPAY_KEY_ID,
+                        "amount": 100000,
+                        "currency": "INR",
+                        "name": "AI PVC Network",
+                        "description": "Monthly Access Subscription - ₹1000",
+                        "image": user.photoURL || "https://ui-avatars.com/api/?name=AIPVC&background=ff0000&color=fff",
+                        "handler": function (response) {
+                            const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                            localStorage.setItem('subscriptionExpiry', (Date.now() + thirtyDaysInMs).toString());
+                            localStorage.setItem('lastPaymentId', response.razorpay_payment_id);
+                            if (selectedRole === 'contractor') {
+                                window.location.href = "dashboard.html";
+                            } else {
+                                window.location.href = "labour.html";
+                            }
+                        },
+                        "prefill": {
+                            "name": user.displayName,
+                            "email": user.email
+                        },
+                        "theme": {
+                            "color": "#ff0000"
+                        }
+                    };
+                    const rzp1 = new Razorpay(options);
+                    rzp1.open();
                 } catch (error) {
                     console.error("Authentication Error:", error.code, error.message);
                     alert("Google Login Failed: " + error.message);

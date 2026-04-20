@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI PVC - My Posts</title>
-    <script>if(localStorage.getItem('isLoggedIn') !== 'true') window.location.replace('login.html');</script>
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') { 
+            window.location.replace('login.html'); 
+        } else {
+            const expiry = localStorage.getItem('subscriptionExpiry');
+            if (!expiry || parseInt(expiry) < Date.now()) {
+                window.location.replace('login.html');
+            }
+        }
+    </script>
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
